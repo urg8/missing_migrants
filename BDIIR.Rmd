@@ -1,0 +1,322 @@
+---
+title: "Big Data in Immigration Research"
+subtitle: "Our sexy title right here"
+author: "Riya Chanduka, Dennis Hammerschmidt, Soyeon Jin, Pauline Kleinschlömer"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Setup and basic data prepration
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/Users/dennis_hammerschmidt/Downloads/")
+```
+
+```{r packages, include=FALSE}
+# Load all required packages and install those that you don't already have
+install_and_load <- function(pkg) {
+  new.pkgs <- pkg[!(pkg %in% installed.packages()[,"Package"])]
+  if(length(new.pkgs))
+    install.packages(new.pkgs, repos="https://cran.rstudio.com/")
+
+  for(pkg_name in pkg)
+    library(pkg_name,character.only=TRUE, quietly = TRUE)
+}
+packages <- c("ggplot2", "plotly", "readr", "RColorBrewer", "tidyverse", "grid", "dplyr", "gridExtra"
+              ,"ggthemes", "ggfortify", "rworldmap", "lubridate", "reshape2", "forcats", "gganimate"
+              ,"animation", "gifski", "epitools")
+install_and_load(packages)
+```
+
+We're using the [Missing Migrants dataset](https://missingmigrants.iom.int/downloads) from 2014 to 2019 (up to the most recent dataset available). In our case, this is the one from May XX.
+
+```{r data_and_preparation, include=FALSE cache=TRUE}
+# load the dataset
+missing <- read_csv("MissingMigrants-Global-2019-05-09T10-44-32.csv")
+
+# simplify column names
+colnames(missing) <- c('id', 'region', 'date', 'year', 'month', 'num_dead', 'est_miss', 'total_dead_missing', 'num_surv', 'num_fem', 'num_male', 'num_child', 'cause', 'location', 'info', 'coord',
+                      'route', 'url', 'geo_group', 'source_qual')
+
+# create new data variable and fix the month variable
+missing$month <- match(missing$month,month.abb)
+missing$date2 <- paste0(missing$year, "/", missing$month, "/01")
+date_helper <- as.month(missing$date2, format = "%Y/%m/%d")
+missing$date2 <- date_helper$dates
+missing$month <- format(missing$date2,"%m")
+
+# create longitude and latitude from the coordinates variable and make them numeric
+missing <- separate(missing, into = c("lat","lon"), coord, sep = ",")
+missing$lon <- as.numeric(missing$lon)
+missing$lat <- as.numeric(missing$lat)
+
+# filter for missings in the date, latitude and longitude
+missing <- missing %>% 
+  filter(!is.na(date2))
+missing <- missing %>% 
+  filter(!is.na(lon))
+missing <- missing %>% 
+  filter(!is.na(lat))
+
+# replace NAs in missing and dead with 0 (for computational purposes)
+missing[c("est_miss", "num_dead", "num_surv",
+          "num_fem", "num_male", "num_child")][is.na(missing[c("est_miss", "num_dead", "num_surv",
+          "num_fem", "num_male", "num_child")])] <- 0
+
+# replace NAs in route and region with unkown
+missing[c("route")][is.na(missing[c("route")])] <- "Unkown"
+missing[c("region")][is.na(missing[c("region")])] <- "Unkown"
+
+# subset the dataset to include only variables of interest
+
+missing <- subset(missing, select = c("id", "region", "date2", "year", "month", "num_dead", "est_miss", "total_dead_missing", "num_surv", "num_fem", "num_male", "num_child", "cause", "lon", "lat", "route", "source_qual"))
+```
+
+tail(sort(table(missing$cause)))
+
+## First descriptive: Where did people go missing the most?
+
+```{r regions_and_year, echo=FALSE, warning=FALSE}
+# create regions data that includes the sum of missings and dead migrants per year for each region
+regions <- missing %>%
+  group_by(region,year) %>%
+  dplyr::summarise(sum(est_miss), sum(num_dead))
+
+regions <- as.data.frame(regions)
+colnames(regions) <- c("region","year","missing","dead")
+regions <- melt(regions, id.vars = c("region", "year"))
+
+# define position ordering for graph
+positions <- c("Unknown", "East Asia", "North America", "South America", "Caribbean", "Europe", "Sub-Saharan Africa", "Central America incl. Mexico", "Horn of Africa", "Southeast Asia", "U.S./Mexico Border", "North Africa", "Mediterranean")
+
+# plot the total number of missings and dead across regions and years
+incident_region <- ggplot(regions) +
+  geom_bar(aes(x = region, y = value, fill = variable),
+           stat = 'identity',
+           position = 'dodge') +
+  coord_flip() +
+  labs(x = "Regions", y = "Total number of missings/deaths") +
+  scale_x_discrete(limits = positions) +
+  labs(fill = "Incident") +
+  facet_wrap(vars(year))
+
+ggplotly(incident_region)
+```
+
+As we see and suspected before, most incidences happen at the Mediterranean Sea.
+
+```{r}
+missing_medsea <- subset(missing, region=="Mediterranean")
+
+region_med <- missing_medsea %>%
+  group_by(route,year) %>%
+  dplyr::summarise(sum(est_miss), sum(num_dead), sum(num_surv))
+
+region_med <- as.data.frame(region_med)
+colnames(region_med) <- c("route","year","missing","dead", "survived")
+region_med <- melt(region_med, id.vars = c("route", "year"))
+
+# make the name of the routes shorter
+route_short <- c("Central Mediterranean"="Central" ,"Western Mediterranean"="Western", "Eastern Mediterranean"="Eastern")
+region_med$route <- as.character(route_short[region_med$route])
+
+# define position ordering for graph
+positions2 <- c("Central", "Western", "Eastern")
+
+# plot the total number of missings and dead across regions and years
+surv_or_not <- ggplot(region_med) +
+  geom_bar(aes(x = route, y = value, fill = variable), 
+               stat = 'identity', position = 'fill') +
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "Regions", y = "Percentage of incidents") +
+  scale_x_discrete(limits = positions2) +
+  labs(fill = "Incident") +
+  facet_wrap(vars(year)) 
+
+library(scales)
+library(withr)
+with_options(list(digits = 1), ggplotly(surv_or_not)) %>% #layout(yaxis = list(type = ""))
+#, tooltip = "text")
+```
+
+```{r}
+monthly <- missing_medsea %>%
+  group_by(year,month) %>%
+  dplyr::summarise(sum(total_dead_missing), sum(num_surv))
+
+monthly <- as.data.frame(monthly)
+colnames(monthly) <- c("year", "month","dead/missing", "survived")
+monthly <- melt(monthly, id.vars = c("year", "month"))
+
+# make the name of the routes shorter
+mon_abb <- c("01"="Jan" ,"02"="Feb", "03"="Mar", "04"="Apr", "05"="May", "06"="Jun", "07"="Jul", "08"="Aug", "09"="Sep", "10"="Oct", "11"="Nov", "12"="Dec")
+monthly$month <- as.character(mon_abb[monthly$month])
+
+monthly$month <- factor(monthly$month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+
+# plot the total number of missings and dead across regions and years
+by_month <- ggplot(monthly) +
+  geom_bar(aes(x = year, y = value, fill = variable),
+           stat = 'identity',
+           position = 'dodge') +
+  #coord_flip() +
+  labs(x = "Months", y = "Total number of incidents") +
+  labs(fill = "Incident") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  facet_wrap(vars(month), nrow = 2, ncol = 6) 
+
+ggplotly(by_month)
+```
+
+
+
+
+
+```{r}
+missing$reliability <- gsub("unknown", "Unverified", missing$reliability)
+missing$reliability <- gsub("Partially verified", "Partially Verified", missing$reliability)
+
+plot1 <- ggplot(missing, aes(x = factor(incident_location), y = dead, fill = factor(reliability))) +
+  geom_bar(stat = 'identity') +
+  coord_flip() +
+  theme_fivethirtyeight(base_size = 7, base_family = "sans") +
+  ggtitle("Death by region") +
+  scale_x_discrete(limits = positions) + 
+  theme(legend.position="bottom")
+
+plot2 <- ggplot(missing, aes(x = factor(incident_location), y = missing, fill = factor(reliability))) +
+  geom_bar(stat = 'identity') +
+  coord_flip() +
+  theme_fivethirtyeight(base_size = 7, base_family = "sans") +
+  ggtitle("Missing by region") +
+  scale_x_discrete(limits = positions)
+
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend <- g_legend(plot1)
+
+grid.arrange(arrangeGrob(plot1 + theme(legend.position="none"),
+                         plot2 + theme(legend.position="none"),
+                         nrow=1),
+             mylegend, nrow=2,heights=c(10, 1))
+```
+
+```{r}
+#deaths by date
+sub_missing <- subset(missing, incident_location=="Southeast Asia" |
+                               incident_location=="U.S./Mexico Border" |
+                               incident_location=="North Africa" |
+                               incident_location=="Mediterranean")
+
+plot3 <- ggplot(sub_missing, aes(x=date, y=dead,color=factor(incident_location))) + 
+  geom_line() +
+  theme_fivethirtyeight(base_size = 7, base_family = "sans") + 
+  ggtitle("Death by date") + 
+  theme(legend.position="bottom")
+
+# missing persons by date
+plot4 <- ggplot(sub_missing, aes(x=date, y=missing,color=factor(incident_location))) + 
+  geom_line() +
+  theme_fivethirtyeight(base_size = 7, base_family = "sans") + 
+  ggtitle("Missing by date")
+
+mylegend2 <- g_legend(plot3)
+
+grid.arrange(arrangeGrob(plot3 + theme(legend.position="none"),
+                         plot4 + theme(legend.position="none"),
+                         nrow=1),
+             mylegend2, nrow=2,heights=c(10, 1))
+```
+
+```{r}
+worldMap <- fortify(map_data("world"), region = "mediterranean")
+
+map <-ggplot() + 
+  geom_map(data = worldMap, map = worldMap,aes(x = long, y = lat, map_id = region, group = group),fill = "white", color = "black", size = 0.25)
+
+missing_med <- subset(missing, incident_location == "Europe" | incident_location == "Mediterranean" | incident_location == "Middle East" | incident_location =="North Africa")
+
+med_missing <- subset(missing_med, missing >= 1)
+map + geom_point(aes(x = lon, y = lat, size=missing, col=factor(incident_location)), alpha=0.5, data = med_missing) +
+      theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
+      scale_color_brewer(palette='Set1') + 
+      theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
+      xlab('') + ylab('') + 
+      ggtitle('Missing persons in the Mediterranean Sea') + ylim(c(29, 47)) + 
+  xlim(c(-8, 42))
+```
+
+```{r}
+# load routes data
+routes <- read_csv("/Users/dennis_hammerschmidt/Downloads/MissingMigrants-Global-2019-05-09T10-44-32.csv")
+colnames(routes) <- c('id', 'region', 'date', 'year', 'month', 'num_dead', 'est_miss', 'total_dead_missing', 'num_surv', 'num_fem', 'num_male', 'num_child', 'cause', 'location', 'info', 'coord',
+                      'route', 'url', 'geo_group', 'source_qual')
+routes$month <- match(routes$month,month.abb)
+routes$date2 <- paste0(routes$year, "/", routes$month, "/01")
+#install.packages("epitools")
+library(epitools)
+date_helper <- as.month(routes$date2, format = "%Y/%m/%d")
+routes$date2 <- date_helper$dates
+
+routes_red <- subset(routes, route=="Central Mediterranean" | route=="Eastern Mediterranean" | route=="Western Mediterranean", select = c(year,date2,total_dead_missing,coord,route))
+routes_red <- separate(routes_red, into = c("lat","lon"), coord, sep = ",")
+routes_red$lon <- as.numeric(routes_red$lon)
+routes_red$lat <- as.numeric(routes_red$lat)
+```
+
+```{r, cache=TRUE}
+worldMap <- fortify(map_data("world"), region = "mediterranean")
+
+map <-ggplot() + 
+  geom_map(data = worldMap, map = worldMap,aes(x = long, y = lat, map_id = region, group = group),fill = "white", color = "black", size = 0.25)
+
+med_map <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
+        geom_path(aes(lon,lat,col=route),data=routes_red,alpha=0.2) +
+        theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
+        scale_color_brewer(palette='Set1') + 
+        theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
+        xlab('') + ylab('') + 
+        ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
+      xlim(c(-8, 42))
+
+ggplotly(med_map)
+```
+
+```{r}
+# only with valid cases (excl. 0 total_dead_missing)
+map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = subset(routes_red, total_dead_missing >1)) +
+      geom_path(aes(lon,lat,col=route),data=routes_red,alpha=0.3) +
+      theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
+      scale_color_brewer(palette='Set1') + 
+      theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
+      xlab('') + ylab('') + 
+      ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
+  xlim(c(-8, 42))
+```
+
+```{r, cache = TRUE}
+# devtools::install_github("thomasp85/transformr") # load if needed
+library(transformr)
+
+mapanimated <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
+      geom_path(aes(lon,lat,col=route),data=routes_red,alpha=0.3) +
+      theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
+      scale_color_brewer(palette='Set1') + 
+      theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
+      xlab('') + ylab('') + 
+      ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
+  xlim(c(-8, 42)) +
+  # Here comes the gganimate specific bits
+  labs(title = 'Year: {frame_time}') +
+  transition_time(year) 
+mapanimated
+#anim_save("mapanimated.gif", animation = last_animation(), path = "/Users/dennis_hammerschmidt/Downloads/")
+
+```
+
+

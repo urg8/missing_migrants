@@ -102,7 +102,7 @@ ggplotly(incident_region)
 
 As we see and suspected before, most incidences happen at the Mediterranean Sea.
 
-```{r}
+```{r stacked_bar_total, eval=FALSE, message=FALSE, warning=FALSE}
 # subset only for the Mediterranean Sea
 missing_medsea <- subset(missing, region=="Mediterranean")
 
@@ -136,7 +136,7 @@ surv_or_not <- ggplot(region_med) +
 with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
-```{r, cache=TRUE}
+```{r map_static, cache=TRUE, eval=FALSE, message=FALSE, warning=FALSE}
 # intiatlize a simple map
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
@@ -158,7 +158,7 @@ med_map
 #ggplotly(med_map)
 ```
 
-```{r, cache = TRUE}
+```{r map_animated, cache = TRUE, eval=FALSE, message=FALSE, warning=FALSE}
 # If not available, load the transformr package directly for github using the following command(s):
 # devtools::install_github("thomasp85/transformr") # load if needed
 # library(transformr)

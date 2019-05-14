@@ -3,8 +3,9 @@ title: "Final Project: Big Data in Immigration Research"
 subtitle: "Our sexy title right here"
 author: "Riya Chanduka, Dennis Hammerschmidt, Soyeon Jin, Pauline Kleinschlömer"
 date: "`r Sys.Date()`"
-output: html_document
-toc: yes
+output: 
+  html_document:
+  toc: true
 ---
 
 ## Setup and basic data prepration
@@ -26,7 +27,7 @@ install_and_load <- function(pkg) {
 }
 packages <- c("ggplot2", "plotly", "readr", "RColorBrewer", "tidyverse", "grid", "dplyr", "gridExtra"
               ,"ggthemes", "ggfortify", "rworldmap", "lubridate", "reshape2", "forcats", "gganimate"
-              ,"animation", "gifski", "epitools", "scales", "withr", "transformr", "devtools")
+              ,"animation", "gifski", "epitools", "scales", "withr", "transformr", "devtools", "magrittr")
 install_and_load(packages)
 ```
 
@@ -72,7 +73,7 @@ missing <- subset(missing, select = c("id", "region", "date2", "year", "month", 
 
 ## First descriptive: Where did people go missing the most?
 
-```{r regions_and_year, echo=FALSE, warning=FALSE}
+```{r regions_and_year, warning=FALSE}
 # create regions data that includes the sum of missings and dead migrants per year for each region
 regions <- missing %>%
   group_by(region,year) %>%
@@ -102,7 +103,7 @@ ggplotly(incident_region)
 
 As we see and suspected before, most incidences happen at the Mediterranean Sea.
 
-```{r stacked_bar_total, eval=FALSE, message=FALSE, warning=FALSE}
+```{r stacked_bar_total, message=FALSE, warning=FALSE}
 # subset only for the Mediterranean Sea
 missing_medsea <- subset(missing, region=="Mediterranean")
 
@@ -136,7 +137,7 @@ surv_or_not <- ggplot(region_med) +
 with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
-```{r map_static, cache=TRUE, eval=FALSE, message=FALSE, warning=FALSE}
+```{r map_static, cache=TRUE, message=FALSE, warning=FALSE}
 # intiatlize a simple map
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
@@ -158,7 +159,7 @@ med_map
 #ggplotly(med_map)
 ```
 
-```{r map_animated, cache = TRUE, eval=FALSE, message=FALSE, warning=FALSE}
+```{r map_animated, cache = TRUE, message=FALSE, warning=FALSE}
 # If not available, load the transformr package directly for github using the following command(s):
 # devtools::install_github("thomasp85/transformr") # load if needed
 # library(transformr)

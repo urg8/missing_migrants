@@ -1,19 +1,20 @@
 ---
-title: "Big Data in Immigration Research"
+title: "Final Project: Big Data in Immigration Research"
 subtitle: "Our sexy title right here"
 author: "Riya Chanduka, Dennis Hammerschmidt, Soyeon Jin, Pauline Kleinschlömer"
 date: "`r Sys.Date()`"
 output: html_document
+toc: yes
 ---
 
 ## Setup and basic data prepration
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("/Users/dennis_hammerschmidt/Downloads/")
+setwd("/Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/")
 ```
 
-```{r packages, include=FALSE}
+```{r package_load, include=FALSE, cache=TRUE}
 # Load all required packages and install those that you don't already have
 install_and_load <- function(pkg) {
   new.pkgs <- pkg[!(pkg %in% installed.packages()[,"Package"])]
@@ -25,7 +26,7 @@ install_and_load <- function(pkg) {
 }
 packages <- c("ggplot2", "plotly", "readr", "RColorBrewer", "tidyverse", "grid", "dplyr", "gridExtra"
               ,"ggthemes", "ggfortify", "rworldmap", "lubridate", "reshape2", "forcats", "gganimate"
-              ,"animation", "gifski", "epitools", "scales", "withr", "transformr")
+              ,"animation", "gifski", "epitools", "scales", "withr", "transformr", "devtools")
 install_and_load(packages)
 ```
 
@@ -53,11 +54,7 @@ missing$lat <- as.numeric(missing$lat)
 
 # filter for missings in the date, latitude and longitude
 missing <- missing %>% 
-  filter(!is.na(date2))
-missing <- missing %>% 
-  filter(!is.na(lon))
-missing <- missing %>% 
-  filter(!is.na(lat))
+  filter(!is.na(date2) & !is.na(lon) & !is.na(lat))
 
 # replace NAs in missing and dead with 0 (for computational purposes)
 missing[c("est_miss", "num_dead", "num_surv",
@@ -72,8 +69,6 @@ missing[c("region")][is.na(missing[c("region")])] <- "Unkown"
 
 missing <- subset(missing, select = c("id", "region", "date2", "year", "month", "num_dead", "est_miss", "total_dead_missing", "num_surv", "num_fem", "num_male", "num_child", "cause", "lon", "lat", "route", "source_qual"))
 ```
-
-tail(sort(table(missing$cause)))
 
 ## First descriptive: Where did people go missing the most?
 
@@ -101,14 +96,17 @@ incident_region <- ggplot(regions) +
   labs(fill = "Incident") +
   facet_wrap(vars(year))
 
+# use ggplotly for interactive exploration
 ggplotly(incident_region)
 ```
 
 As we see and suspected before, most incidences happen at the Mediterranean Sea.
 
 ```{r}
+# subset only for the Mediterranean Sea
 missing_medsea <- subset(missing, region=="Mediterranean")
 
+# create regions data only for Mediterranean Sea that also includes the number of people surviving an incident
 region_med <- missing_medsea %>%
   group_by(route,year) %>%
   dplyr::summarise(sum(est_miss), sum(num_dead), sum(num_surv))
@@ -117,7 +115,7 @@ region_med <- as.data.frame(region_med)
 colnames(region_med) <- c("route","year","missing","dead", "survived")
 region_med <- melt(region_med, id.vars = c("route", "year"))
 
-# make the name of the routes shorter
+# reduce the name of the routes to their direction (since we're only in the Mediterranean Sea)
 route_short <- c("Central Mediterranean"="Central" ,"Western Mediterranean"="Western", "Eastern Mediterranean"="Eastern")
 region_med$route <- as.character(route_short[region_med$route])
 
@@ -134,16 +132,19 @@ surv_or_not <- ggplot(region_med) +
   labs(fill = "Incident") +
   facet_wrap(vars(year)) 
 
-with_options(list(digits = 1), ggplotly(surv_or_not)) #%>% #layout(yaxis = list(type = ""))
-#, tooltip = "text")
+# use ggplotly for visualization and round the percentage of stacked bar chart by 2 digits
+with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
 ```{r, cache=TRUE}
+# intiatlize a simple map
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
+# define axis, shape and visual display of the map
 map <-ggplot() + 
   geom_map(data = worldMap, map = worldMap,aes(x = long, y = lat, map_id = region, group = group),fill = "white", color = "black", size = 0.25)
 
+# plot the map with total number of dead and missing migrants including the three routes in the Mediterranean Sea
 med_map <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
         geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.2) +
         theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
@@ -153,13 +154,16 @@ med_map <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alph
         ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
       xlim(c(-8, 42))
 med_map
+# optionally: use ggplotly for visualization. Caution: takes some time to run!
 #ggplotly(med_map)
 ```
 
 ```{r, cache = TRUE}
+# If not available, load the transformr package directly for github using the following command(s):
 # devtools::install_github("thomasp85/transformr") # load if needed
 # library(transformr)
 
+# create an animated map for the total number of dead and missing migrants as well as the three routes on the Mediterranean Sea over the entire time frame of the dataset
 mapanimated <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
       geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.3) +
       theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
@@ -168,11 +172,13 @@ mapanimated <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), 
       xlab('') + ylab('') + 
       ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
   xlim(c(-8, 42)) +
-  # Here comes the gganimate specific bits
   labs(title = 'Year: {frame_time}') +
   transition_time(year) 
+
 mapanimated
-#anim_save("mapanimated.gif", animation = last_animation(), path = "/Users/dennis_hammerschmidt/Downloads/")
+
+# optional: save the animation as .gif
+#anim_save("mapanimated.gif", animation = last_animation())
 
 ```
 

@@ -137,6 +137,36 @@ surv_or_not <- ggplot(region_med) +
 with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
+```{r}
+	monthly <- missing_medsea %>%
+	  group_by(year,month) %>%
+	  dplyr::summarise(sum(total_dead_missing), sum(num_surv))
+	
+	monthly <- as.data.frame(monthly)
+	colnames(monthly) <- c("year", "month","dead/missing", "survived")
+	monthly <- melt(monthly, id.vars = c("year", "month"))
+	
+	# make the name of the routes shorter
+	mon_abb <- c("01"="Jan" ,"02"="Feb", "03"="Mar", "04"="Apr", "05"="May", "06"="Jun", "07"="Jul", "08"="Aug", "09"="Sep", "10"="Oct", "11"="Nov", "12"="Dec")
+	monthly$month <- as.character(mon_abb[monthly$month])
+	
+	monthly$month <- factor(monthly$month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+	
+	# plot the total number of missings and dead across regions and years
+	by_month <- ggplot(monthly) +
+	  geom_bar(aes(x = year, y = value, fill = variable),
+	           stat = 'identity',
+	           position = 'dodge') +
+	  #coord_flip() +
+	  labs(x = "Months", y = "Total number of incidents") +
+	  labs(fill = "Incident") +
+	  theme(axis.text.x = element_text(angle = 45)) +
+	  facet_wrap(vars(month), nrow = 2, ncol = 6) 
+	
+	ggplotly(by_month)
+```
+
+
 ```{r map_static, cache=TRUE, message=FALSE, warning=FALSE}
 # intiatlize a simple map
 worldMap <- fortify(map_data("world"), region = "mediterranean")

@@ -137,7 +137,7 @@ surv_or_not <- ggplot(region_med) +
 with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
-```{r}
+```{r by_month, message=FALSE, warning=FALSE}
 	monthly <- missing_medsea %>%
 	  group_by(year,month) %>%
 	  dplyr::summarise(sum(total_dead_missing), sum(num_surv))

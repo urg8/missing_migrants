@@ -1,13 +1,41 @@
 ---
-title: "Final Project: Big Data in Immigration Research"
-subtitle: "Our sexy title right here"
-author: "Riya Chanduka, Dennis Hammerschmidt, Soyeon Jin, Pauline Kleinschlömer"
-date: "`r Sys.Date()`"
 output: 
-  html_document:
-  toc: true
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    fig_width: 6
+    fig_height: 4
+    latex_engine: pdflatex
+    template: /Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/svm-latex-ms.tex
+title: "XXX"
+thanks: "Final paper submitted as part of the course 'Big Data and Immigration Research' in Spring 2019."
+author: 
+- name: Riya Chanduka
+  affiliation: Clemson University
+- name: Dennis Hammerschmidt
+  affiliation: dhammers@mail.uni-mannheim.de
+- name: Soyeon Jin
+  affiliation: Springfield University
+- name: Pauline Kleinschlömer
+  affiliation:
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+always_allow_html: yes
+# spacing: double
+bibliography: /Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/references.bib
+biblio-style: apsr
 ---
-
+\maketitle
+\thispagestyle{empty}
+\clearpage
+\tableofcontents
+\pagenumbering{roman}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
 ## Introduction 
 
  The number of migrants, especially forced migrants are increasing at a rapid phase worldwide. According to the 2018 report from the International Organization for Migration (IOM), 68.5 million individuals are forced to migrate in 2017 because of persecution, conflict, generalized violence, or human rights violations. The issue gets notably salient in 2015 following so-called ‘refugee crisis’ due to the Syrian civil war.
@@ -33,55 +61,122 @@ The number of deaths indicates the total number of people confirmed dead in an i
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::knit_engines$set(python = reticulate::eng_python)
 setwd("/Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/")
 ```
 
 ```{r package_load, include=FALSE, cache=TRUE}
 # Load all required packages and install those that you don't already have
 install_and_load <- function(pkg) {
-  new.pkgs <- pkg[!(pkg %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs))
-    install.packages(new.pkgs, repos="https://cran.rstudio.com/")
-
-  for(pkg_name in pkg)
-    library(pkg_name,character.only=TRUE, quietly = TRUE)
+  new.pkgs <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkgs))
+    install.packages(new.pkgs, repos = "https://cran.rstudio.com/")
+  
+  for (pkg_name in pkg)
+    library(pkg_name, character.only = TRUE, quietly = TRUE)
 }
-packages <- c("ggplot2", "plotly", "readr", "RColorBrewer", "tidyverse", "grid", "dplyr", "gridExtra"
-              ,"ggthemes", "ggfortify", "rworldmap", "lubridate", "reshape2", "forcats", "gganimate"
-              ,"animation", "gifski", "epitools", "scales", "withr", "transformr", "devtools", "magrittr")
+packages <-
+  c(
+    "ggplot2",
+    "plotly",
+    "readr",
+    "RColorBrewer",
+    "tidyverse",
+    "grid",
+    "dplyr",
+    "gridExtra", 
+    "ggthemes",
+    "ggfortify",
+    "rworldmap",
+    "lubridate",
+    "reshape2",
+    "forcats",
+    "gganimate", 
+    "animation",
+    "gifski",
+    "epitools",
+    "scales",
+    "withr",
+    "transformr",
+    "devtools",
+    #"magrittr",
+    "reticulate",
+    "knitr",
+    "rmarkdown"
+  )
 install_and_load(packages)
+
+# python setup
+use_python("/Users/dennis_hammerschmidt/anaconda2/bin/python3")
+import("numpy", as = "np")
+py_install("pandas")
+import("pandas", as = "pd")
+import("matplotlib.pyplot", as = "plt")
+py_install("seaborn")
+import("seaborn", as = "sns")
 ```
 
 We're using the [Missing Migrants dataset](https://missingmigrants.iom.int/downloads) from 2014 to 2019 (up to the most recent dataset available). In our case, this is the one from May XX.
 
 ```{r data_and_preparation, include=FALSE, cache=TRUE, warning=FALSE}
 # load the dataset
-missing <- read_csv("MissingMigrants-Global-2019-05-09T10-44-32.csv")
+missing <-
+  read_csv("MissingMigrants-Global-2019-05-09T10-44-32.csv")
 
 # simplify column names
-colnames(missing) <- c('id', 'region', 'date', 'year', 'month', 'num_dead', 'est_miss', 'total_dead_missing', 'num_surv', 'num_fem', 'num_male', 'num_child', 'cause', 'location', 'info', 'coord',
-                      'route', 'url', 'geo_group', 'source_qual')
+colnames(missing) <-
+  c(
+    'id',
+    'region',
+    'date',
+    'year',
+    'month',
+    'num_dead',
+    'est_miss',
+    'total_dead_missing',
+    'num_surv',
+    'num_fem',
+    'num_male',
+    'num_child',
+    'cause',
+    'location',
+    'info',
+    'coord',
+    'route',
+    'url',
+    'geo_group',
+    'source_qual'
+  )
 
 # create new data variable and fix the month variable
-missing$month <- match(missing$month,month.abb)
+missing$month <- match(missing$month, month.abb)
 missing$date2 <- paste0(missing$year, "/", missing$month, "/01")
 date_helper <- as.month(missing$date2, format = "%Y/%m/%d")
 missing$date2 <- date_helper$dates
-missing$month <- format(missing$date2,"%m")
+missing$month <- format(missing$date2, "%m")
 
 # create longitude and latitude from the coordinates variable and make them numeric
-missing <- separate(missing, into = c("lat","lon"), coord, sep = ",")
+missing <-
+  separate(missing, into = c("lat", "lon"), coord, sep = ",")
 missing$lon <- as.numeric(missing$lon)
 missing$lat <- as.numeric(missing$lat)
 
 # filter for missings in the date, latitude and longitude
-missing <- missing %>% 
+missing <- missing %>%
   filter(!is.na(date2) & !is.na(lon) & !is.na(lat))
 
 # replace NAs in missing and dead with 0 (for computational purposes)
-missing[c("est_miss", "num_dead", "num_surv",
-          "num_fem", "num_male", "num_child")][is.na(missing[c("est_miss", "num_dead", "num_surv",
-          "num_fem", "num_male", "num_child")])] <- 0
+missing[c("est_miss",
+          "num_dead",
+          "num_surv",
+          "num_fem",
+          "num_male",
+          "num_child")][is.na(missing[c("est_miss",
+                                        "num_dead",
+                                        "num_surv",
+                                        "num_fem",
+                                        "num_male",
+                                        "num_child")])] <- 0
 
 # replace NAs in route and region with unkown
 missing[c("route")][is.na(missing[c("route")])] <- "Unkown"
@@ -89,23 +184,91 @@ missing[c("region")][is.na(missing[c("region")])] <- "Unkown"
 
 # subset the dataset to include only variables of interest
 
-missing <- subset(missing, select = c("id", "region", "date2", "year", "month", "num_dead", "est_miss", "total_dead_missing", "num_surv", "num_fem", "num_male", "num_child", "cause", "lon", "lat", "route", "source_qual"))
+missing <-
+  subset(
+    missing,
+    select = c(
+      "id",
+      "region",
+      "date2",
+      "year",
+      "month",
+      "num_dead",
+      "est_miss",
+      "total_dead_missing",
+      "num_surv",
+      "num_fem",
+      "num_male",
+      "num_child",
+      "cause",
+      "lon",
+      "lat",
+      "route",
+      "source_qual"
+    )
+  )
 ```
 
 ## First descriptive: Where did people go missing the most?
 
+<!-- ```{python, cache = TRUE} -->
+<!-- # import numpy as np -->
+<!-- # import pandas as pd -->
+<!-- # import matplotlib.pyplot as plt -->
+
+<!-- r.missing.groupby('region')['num_dead'].sum().to_frame().plot(kind = "bar") -->
+<!-- ``` -->
+
+<!-- ```{python, cache = TRUE} -->
+<!-- ## Doesn't work the way it does in python -->
+
+<!-- # import pandas as pd -->
+<!-- # r.missing['total_dead_missing'] = pd.to_numeric(r.missing.total_dead_missing, errors='coerce') -->
+<!-- # r.missing.groupby('region')['total_dead_missing'].sum().to_frame().plot(kind = "bar") -->
+<!-- ``` -->
+
+<!-- ```{python, cache = TRUE} -->
+<!-- Total = r.missing['num_surv'].sum() -->
+<!-- Survival = r.missing.groupby(['month']).agg({'num_surv': 'sum'}) -->
+<!-- Survival['survival_rate']=(Survival['num_surv']/Total)*100 -->
+<!-- #Survival=Survival.reset_index() -->
+<!-- #months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",  -->
+<!--           #"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] -->
+<!-- #Survival['month'] = pd.Categorical(Survival['month'], ordered=True) -->
+<!-- #Survival.sort_values('month') -->
+<!-- import seaborn as sns -->
+
+<!-- sns.pointplot(x="month", y="survival_rate", data=Survival) -->
+<!-- ``` -->
+
+
 ```{r regions_and_year, warning=FALSE}
 # create regions data that includes the sum of missings and dead migrants per year for each region
 regions <- missing %>%
-  group_by(region,year) %>%
+  group_by(region, year) %>%
   dplyr::summarise(sum(est_miss), sum(num_dead))
 
 regions <- as.data.frame(regions)
-colnames(regions) <- c("region","year","missing","dead")
+colnames(regions) <- c("region", "year", "missing", "dead")
 regions <- melt(regions, id.vars = c("region", "year"))
 
 # define position ordering for graph
-positions <- c("Unknown", "East Asia", "North America", "South America", "Caribbean", "Europe", "Sub-Saharan Africa", "Central America incl. Mexico", "Horn of Africa", "Southeast Asia", "U.S./Mexico Border", "North Africa", "Mediterranean")
+positions <-
+  c(
+    "Unknown",
+    "East Asia",
+    "North America",
+    "South America",
+    "Caribbean",
+    "Europe",
+    "Sub-Saharan Africa",
+    "Central America incl. Mexico",
+    "Horn of Africa",
+    "Southeast Asia",
+    "U.S./Mexico Border",
+    "North Africa",
+    "Mediterranean"
+  )
 
 # plot the total number of missings and dead across regions and years
 incident_region <- ggplot(regions) +
@@ -117,28 +280,35 @@ incident_region <- ggplot(regions) +
   scale_x_discrete(limits = positions) +
   labs(fill = "Incident") +
   facet_wrap(vars(year))
-
+# uncomment for html output
+incident_region
 # use ggplotly for interactive exploration
-ggplotly(incident_region)
+# ggplotly(incident_region)
 ```
 
 As we see and suspected before, most incidences happen at the Mediterranean Sea.
 
 ```{r stacked_bar_total, message=FALSE, warning=FALSE}
 # subset only for the Mediterranean Sea
-missing_medsea <- subset(missing, region=="Mediterranean")
+missing_medsea <- subset(missing, region == "Mediterranean")
 
 # create regions data only for Mediterranean Sea that also includes the number of people surviving an incident
 region_med <- missing_medsea %>%
-  group_by(route,year) %>%
+  group_by(route, year) %>%
   dplyr::summarise(sum(est_miss), sum(num_dead), sum(num_surv))
 
 region_med <- as.data.frame(region_med)
-colnames(region_med) <- c("route","year","missing","dead", "survived")
+colnames(region_med) <-
+  c("route", "year", "missing", "dead", "survived")
 region_med <- melt(region_med, id.vars = c("route", "year"))
 
 # reduce the name of the routes to their direction (since we're only in the Mediterranean Sea)
-route_short <- c("Central Mediterranean"="Central" ,"Western Mediterranean"="Western", "Eastern Mediterranean"="Eastern")
+route_short <-
+  c(
+    "Central Mediterranean" = "Central" ,
+    "Western Mediterranean" = "Western",
+    "Eastern Mediterranean" = "Eastern"
+  )
 region_med$route <- as.character(route_short[region_med$route])
 
 # define position ordering for graph
@@ -146,45 +316,80 @@ positions2 <- c("Central", "Western", "Eastern")
 
 # plot the total number of missings and dead across regions and years
 surv_or_not <- ggplot(region_med) +
-  geom_bar(aes(x = route, y = value, fill = variable), 
-               stat = 'identity', position = 'fill') +
+  geom_bar(aes(x = route, y = value, fill = variable),
+           stat = 'identity',
+           position = 'fill') +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Regions", y = "Percentage of incidents") +
   scale_x_discrete(limits = positions2) +
   labs(fill = "Incident") +
-  facet_wrap(vars(year)) 
-
+  facet_wrap(vars(year))
+# uncomment for html output
+surv_or_not
 # use ggplotly for visualization and round the percentage of stacked bar chart by 2 digits
-with_options(list(digits = 1), ggplotly(surv_or_not)) 
+# with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
 ```{r by_month, message=FALSE, warning=FALSE}
 monthly <- missing_medsea %>%
-	 group_by(year,month) %>%
-	 dplyr::summarise(sum(total_dead_missing), sum(num_surv))
-	
+  group_by(year, month) %>%
+  dplyr::summarise(sum(total_dead_missing), sum(num_surv))
+
 monthly <- as.data.frame(monthly)
-colnames(monthly) <- c("year", "month","dead/missing", "survived")
+colnames(monthly) <- c("year", "month", "dead/missing", "survived")
 monthly <- melt(monthly, id.vars = c("year", "month"))
-	
-	# make the name of the routes shorter
-mon_abb <- c("01"="Jan" ,"02"="Feb", "03"="Mar", "04"="Apr", "05"="May", "06"="Jun", "07"="Jul", "08"="Aug", "09"="Sep", "10"="Oct", "11"="Nov", "12"="Dec")
+
+# make the name of the routes shorter
+mon_abb <-
+  c(
+    "01" = "Jan" ,
+    "02" = "Feb",
+    "03" = "Mar",
+    "04" = "Apr",
+    "05" = "May",
+    "06" = "Jun",
+    "07" = "Jul",
+    "08" = "Aug",
+    "09" = "Sep",
+    "10" = "Oct",
+    "11" = "Nov",
+    "12" = "Dec"
+  )
 monthly$month <- as.character(mon_abb[monthly$month])
-	
-monthly$month <- factor(monthly$month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-	
-	# plot the total number of missings and dead across regions and years
+
+monthly$month <-
+  factor(
+    monthly$month,
+    levels = c(
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    )
+  )
+
+# plot the total number of missings and dead across regions and years
 by_month <- ggplot(monthly) +
-	 geom_bar(aes(x = year, y = value, fill = variable),
-	         stat = 'identity',
-	         position = 'dodge') +
-	 #coord_flip() +
-	 labs(x = "Months", y = "Total number of incidents") +
-	 labs(fill = "Incident") +
-	 theme(axis.text.x = element_text(angle = 45)) +
-	 facet_wrap(vars(month), nrow = 2, ncol = 6) 
-	
-ggplotly(by_month)
+  geom_bar(aes(x = year, y = value, fill = variable),
+           stat = 'identity',
+           position = 'dodge') +
+  #coord_flip() +
+  labs(x = "Months", y = "Total number of incidents") +
+  labs(fill = "Incident") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  facet_wrap(vars(month), nrow = 2, ncol = 6)
+# uncomment for html output
+by_month
+# for animated output
+# ggplotly(by_month)
 ```
 
 
@@ -193,21 +398,38 @@ ggplotly(by_month)
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
 # define axis, shape and visual display of the map
-map <-ggplot() + 
-  geom_map(data = worldMap, map = worldMap,aes(x = long, y = lat, map_id = region, group = group),fill = "white", color = "black", size = 0.25)
+map <- ggplot() +
+  geom_map(
+    data = worldMap,
+    map = worldMap,
+    aes(
+      x = long,
+      y = lat,
+      map_id = region,
+      group = group
+    ),
+    fill = "white",
+    color = "black",
+    size = 0.25
+  )
 
 # plot the map with total number of dead and missing migrants including the three routes in the Mediterranean Sea
-med_map <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
-        geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.2) +
-        theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
-        scale_color_brewer(palette='Set1') + 
-        theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
-        xlab('') + ylab('') + 
-        ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
-      xlim(c(-8, 42))
+med_map <-
+  map + geom_point(aes(x = lon, y = lat, size = total_dead_missing),
+                   alpha = 0.5,
+                   data = missing_medsea) +
+  geom_path(aes(lon, lat, col = route), data = missing_medsea, alpha =
+              0.2) +
+  theme_fivethirtyeight(base_size = 10, base_family = "sans") +
+  scale_color_brewer(palette = 'Set1') +
+  theme(axis.text.x = element_text(size = 8, angle = 90),
+        legend.position = 'top') +
+  xlab('') + ylab('') +
+  ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) +
+  xlim(c(-8, 42))
 med_map
 # optionally: use ggplotly for visualization. Caution: takes some time to run!
-#ggplotly(med_map)
+# ggplotly(med_map)
 ```
 
 ```{r map_animated, cache = TRUE, message=FALSE, warning=FALSE}
@@ -216,18 +438,23 @@ med_map
 # library(transformr)
 
 # create an animated map for the total number of dead and missing migrants as well as the three routes on the Mediterranean Sea over the entire time frame of the dataset
-mapanimated <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
-      geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.3) +
-      theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
-      scale_color_brewer(palette='Set1') + 
-      theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
-      xlab('') + ylab('') + 
-      ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
+mapanimated <-
+  map + geom_point(aes(x = lon, y = lat, size = total_dead_missing),
+                   alpha = 0.5,
+                   data = missing_medsea) +
+  geom_path(aes(lon, lat, col = route), data = missing_medsea, alpha =
+              0.3) +
+  theme_fivethirtyeight(base_size = 10, base_family = "sans") +
+  scale_color_brewer(palette = 'Set1') +
+  theme(axis.text.x = element_text(size = 8, angle = 90),
+        legend.position = 'top') +
+  xlab('') + ylab('') +
+  ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) +
   xlim(c(-8, 42)) +
   labs(title = 'Year: {frame_time}') +
-  transition_time(year) 
-
-mapanimated
+  transition_time(year)
+# uncomment for html output
+# mapanimated
 
 # optional: save the animation as .gif
 #anim_save("mapanimated.gif", animation = last_animation())

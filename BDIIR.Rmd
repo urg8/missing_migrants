@@ -16,7 +16,7 @@ author:
 - name: Dennis Hammerschmidt
   affiliation: dhammers@mail.uni-mannheim.de
 - name: Soyeon Jin
-  affiliation: Springfield University
+  affiliation: sojin@mail.uni-mannheim.de
 - name: Pauline Kleinschlömer
   affiliation:
 date: "`r format(Sys.time(), '%B %d, %Y')`"

@@ -1,12 +1,70 @@
 ---
-title: "Final Project: Big Data in Immigration Research"
-subtitle: "Our sexy title right here"
-author: "Riya Chanduka, Dennis Hammerschmidt, Soyeon Jin, Pauline Kleinschlömer"
-date: "`r Sys.Date()`"
 output: 
-  html_document:
-  toc: true
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    fig_width: 6
+    fig_height: 4
+    latex_engine: pdflatex
+    template: /Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/svm-latex-ms.tex
+title: "XXX"
+thanks: "Final paper submitted as part of the course 'Big Data and Immigration Research' in Spring 2019."
+author: 
+- name: Riya Chanduka
+  affiliation: Clemson University
+- name: Dennis Hammerschmidt
+  affiliation: dhammers@mail.uni-mannheim.de
+- name: Soyeon Jin
+  affiliation: sojin@mail.uni-mannheim.de
+- name: Pauline Kleinschlömer
+  affiliation: pkleinsc@mail.uni-mannheim.de
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+always_allow_html: yes
+# spacing: double
+bibliography: /Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/references.bib
+biblio-style: apsr
 ---
+\maketitle
+\thispagestyle{empty}
+\clearpage
+\tableofcontents
+\pagenumbering{roman}
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+## Introduction 
+
+ The number of migrants, especially forced migrants are increasing at a rapid phase worldwide. According to the 2018 report from the International Organization for Migration (IOM) [@IOMsGlobalMigrationDataAnalysisCentre.2018], 68.5 million individuals are forced to migrate in 2017 because of persecution, conflict, generalized violence, or human rights violations. The issue gets notably salient in 2015 following so-called ‘refugee crisis’ due to the Syrian civil war.
+  Meanwhile, on 2nd September 2015, the picture of drowned 3-year-old Syrian boy, Aylan Kurdi in the Mediterranean Sea alarmed the world the seriousness of the issue and the difficulties which migrants face during their journey. However, despite its political saliency, there are still a lot of data gaps in migration research. IOM pointed out the issue in its 2018 report, insisting the necessity to fill out data gaps in the topics such as irregular migration, missing migrants and migration flows.
+ “Missing Migrants Project [@IOM.2019]” by International Organization for Migration (IOM) began to fill the gap in quantitative data concerning migrants’ journey after the tragic accident at October 2013, when two ships have wrecked near the Italian island of Lampedusa which caused the death of at least 368 individuals. Missing migrants project tracks the missing of refugees and asylum-seekers during their migration journey combining different data sources. By providing information about missing migrants, missing migrants project not only notify the world with the precarious situation migrants face but also point out the possible improvement in regulatory or administrative system to ensure safe migration journey. This achievement is important to tackle the United Nations’ Sustainable Development Goals (SDGs) [@GlobalMigrationDataPortal.n.d.]. Migration is a cross-cutting issue that is relevant to all SDGs. The Agenda’s core principle is “leaving no one behind”. Especially Goal 10.7 underlines an “orderly, safe, regular and responsible migration and mobility of people”. Therefore, it is mandatory to understand patterns of migrants’ journeys in order to achieve this goal by 2030.  The number of missing migrants can serve as a helpful indicator. However, the data of the project should be seen as approximations because the true number of missing migrants is unknown. It is not possible to report all deaths and disappearances because many bodies will never be found or identified.
+ IOM has recognized the importance of adopting the big data in migration research to fill the gap in quantitative data [@black.2017a]. With acknowledgement of necessity to implement big data, Missing migrants project combine various sources and type of data to track the missing migrants information, from national authorities to interviews of migrants. 
+ To dedicate to the missing migrants project aim, this report tries to explain the present of migration route and the dangerousness of different routes in the Mediterranean area, taking full advantage of the data offered by missing migrants project. Since migration is a continuous process that never stops, it is necessary to keep a constant eye on the changing patterns of migrants' travel. Therefore, this report analyses different routes of migrants in the Mediterranean Sea and compares changes over time. Also, this report tries to figure out possible factors affecting the journey to prevent further incident. To achieve this aim, this report begins by explaining the various migration routes, especially focusing on three different routes in the Mediterranean area. Then this report proceeds to explain the missing migrants project and the uniqueness of the data, along with the necessity to use big data for migration research. After that, death and missing of migrants on those routes are presented, suggesting the possible cause of dangerousness of the routes. Lastly, the report discusses the limitation of the report and suggest a possible improvement of the report by combining the data with weather data. 
+
+## Theoretical Background
+
+All over the world people are trying to escape persecution, conflicts or violence. They leave their home country, family and friends in hopes that they will have better economic and social opportunities in the receiving country. However, migrants and refugees are often at high risks of serious human rights violations and death on their journey to better expectations. The route they take is often an important factor in calculating the risk of death. Each route has its own pattern, which change over time due to multilateral agreements or the development of conflicts. Moreover, migrants’ economic situation also matters. Their financial security affects whether they can afford to pay smugglers. The price migrants pay a smuggler for their journey on the Mediterranean Sea is responsible for their place on a boat. Places on the top deck are more expensive, because in the event of a shipwreck, it is easier to escape from above than from the inside of the boat  [@IOMsGlobalMigrationDataAnalysisCentre.2016]. Smugglers can charge a lot of money tickets because places on a boat to get to Europe are sought after. The popularity of the route is one reason why this report focuses on the Mediterranean area. Migrants’ journey to Europe is closely linked to a high risk. According to the International Organization of Migration (IOM), about two thirds of the total number of deaths and disappearances worldwide occur on migrants’ way to Europe. This is mainly due to oversea routes [@Black.2017]. However, it is also possible that many more died on their way to the country of departure. But deadly incidents which happen overland are reported less frequently, as migrants are often alone or only accompanied by one or two other migrants compared to oversea journeys. The large number of reported incidents on the Mediterranean oversea routes is another reason why this report focuses only on this area [@Black.2017]. 
+There are mainly three main routes to come to Europe oversea: Eastern Mediterranean route from Turkey to Greece, Central Mediterranean route from North Africa to Italy and Malta and finally the Western Mediterranean route between Morocco and Spain.
+At the beginning of the “refugee crisis” in 2015, the route through the Eastern Mediterranean was migrants’ most important irregular entry to Europe, mainly used by Syrians and Afghan citizens but also by migrants from South Asia. After the implementation of the European Union - Turkey announcement on March 18, 2016, arrivals declined rapidly. The goal of the agreement was to restrict irregular migration routes from Turkey to the EU, create better living conditions for migrants who need to stay in Turkey before they can continue their journey, and to guarantee legal migration to Europe. In addition to reducing the number of migrants entering Europe irregularly, the agreement has brought financial and political benefits for Turkey. As a result, arrivals to Turkey dropped by around 97 percent [@EuropeanCommission.2019]. The consequences for migrants on their way to Europe were immediately obvious. 83 percent of deaths were reported before the implementation of the agreement in March 2016 [@IOMsGlobalMigrationDataAnalysisCentre.2017]. 
+Hence, migrants had to consider other options to get to Europe and the importance of the Central Mediterranean route increased. Embarking to Italy or Malta mainly takes place in Libya, but also in Egypt, Tunisia or Algeria some vessels start their journey to Europe. The route is mainly used by migrants from Sub-Saharan Africa, Horn of Africa or Western Africa [@Black.2017; @TheUNRefugeeAgency.2018]. According to the International Organization of Migration, the Central Mediterranean route is considered to be the deadliest migration route in the world. It has the highest number of deaths and missing migrants in the Mediterranean sea.  Between 2014 and 2017, 1 in 50 migrants died on their way crossing the sea from Africa to Italy. This number is especially striking in comparison to the Eastern Mediterranean route where 1 in 900 migrants died or disappeared [@Black.2017]. Although the number of migrants arriving in Italy fell by 65 percent between July and September 2017, the number of reported dead and missing migrants decreased by only 47 percent [@Black.2017]. There are many hypotheses as to why the total number of migrants has decreased, but the number of fatalities has not. One explanation is based on reports which indicate that migrants are stranded in Libya. The government is preventing them from making their way to Europe [@AmnestyInternational.2015]. Another possible factor is the increased use of less-seaworthy vessels by smugglers. The IOM assumes that a higher proportion of rubber dinghies are used. These vessels are less robust than wooden boats and may deflate during the journey. The increased number of deaths on this route may also be related to increasingly dangerous smuggling practices, where more than one boat leaves Libya at a time or embarking is not restricted to better weather and sea conditions anymore [@Black.2017]. 
+The third route, which is less covered by media, is the Western Mediterranean route. Comparatively few migrants use this route for their crossing, which is one reason for the lower level of global attention. This makes it difficult to estimate the number of deceased and missing migrants as the incidents are less well known. However, the importance of this route is raising. While between January and September 2016 only 3,808 migrants crossed the Mediterranean Sea from Morocco to Spain, which is only 14 kilometers wide at its narrowest point, 12,122 migrants crossed the borders in the same period in 2017 [@IOMsGlobalMigrationDataAnalysisCentre.2017b]. So far, the number of dead and missing migrants has increased every year of the IOM’s project. Of course, this is partly a result of the increased total number of migrants. One reason for the raising arrivals in Spain is the uprisings in the Moroccan Rif region in 2016/ 2017. However, the increase in deaths in relation to the number of arrivals in Spain shows that migration is becoming increasingly dangerous here too. On reason for the rising number of deaths is that the successful crossing of border fences between the two countries over many years has been made more difficult by the increase in the number of security forces. Nowadays, the escape from Morocco has increasingly shifted to boats or to trying to cross the Mediterranean by swimming through the ocean.  
+The literature review reports that the patterns and dangers of the Mediterranean routes are constantly changing due to intergovernmental agreements, increased frontier protection or emerging conflicts. With regard to the United Nation’s Sustainable Development Goal 10.7 which aims an orderly and safe migration, current literature indicate that migration has become less and not more safe. Nonetheless, former literature only concentrate in their reports on a particular year or route. This reports aims to provide an overview of the changing patterns in all three Mediterranean routes from 2014 - 2019. Does a comparison of all routes reveal that migration has become less safe? What are consequences of the EU-Turkey agreement? Can the data confirm the hypothesis that embarking is no longer restricted to good weather conditions? What is the general trend for developments in 2019? For the descriptive analysis, this report uses the latest available data from the UN’s missing migrants dataset, which was updated on May, 09 2019. To the best of our knowledge, a report on the latest developments in 2019 has not yet been published. 
+
+## Data and Methods 
+ The present report uses the data provided by the ‘Missing Migrants Project’, conducted by the International Organization for Migration (IOM). The missing migrants project has begun after witnessing the tragic incident at October 2013 near the Italian island of Lampedusa, where two shipwrecks led to the deaths of at least 368 migrant individuals. In response to the incident and the total rising number of migrants, IOM launched the missing migrants project to report the present migration. The aim of the project is to improve the precarious situation migrants encounter during their journey. Missing migrants project provides information about the missings and death of the migrants at the external borders or during their journey due to transportation accidents, shipwrecks, violent attacks, or medical complications. Missing migrants project;s data and content is freely available at the project’s website. 
+ The missing migrants project has its strength in the fact that they gather information from diverse sources, employing not only traditional media but also social media to find data. The information sources range from official records to media reports, NGOS, and surveys and interviews of migrants. To provide latest data, missing migrants provide the number of arrivals and crossings for the current year every Monday and Thursday. 
+ To be specific, in the Mediterranean region, national authorities deliver the information to IOM field missions. At landing points in Italy and Greece, IOM and other organizations which receive survivors obtain the data. Also, IOM cooperates with UNHCR, the United Nation Refugee Agency, at the Mediterranean region to validate the data on missing migrants. On the other hand, on the United States and Mexico border, U.S county medical examiners, coroners, sheriff’s officers and media reports covering the death on the Mexican side of the border provide and accumulate the data. Lastly, in Africa, media, NGOs, such as Regional Mixed Migration Secretariat and International Red Cross or Red Crescent gather the data concerning the issue. 
+ The missing migrants project covers various information about migrants’ missings and death. It includes the region of incident, reported date, reported year, reported month, number dead, number missing, total dead and missing, number of survivors, number of females, males, and children, age, country of origin, region of origin, cause of death, location description, location coordinates, migration routes, UNSD geographical grouping, source quality, and further comments. 
+The number of deaths indicates the total number of people confirmed dead in an incident. The people who are presumed to be dead due to an incident such as shipwrecks are left to be blank. Meanwhile, the number of missing migrants covers the shipwreck in general. It is recorded by subtracting the number of bodies recovered and the number of survivors from the total original number of migrants on the boat. The information also relies on a report by surviving migrants or witness. Where there are no reported missing migrants, it is left blank. The age of decedents is occasionally substituted with estimated age range. If it is not reported, it is left blank. Region of origin of the decedent's are at times recorded as ‘Presumed’ or (P) and if it is unknown, ‘unknown’ is recorded. When the cause of death could not be identified, the reason for the missing of identification is recorded (e.g., Unknown - Skeletal remains only). Migration routes show the migration route where the incident took place. With the help of this variable it is possible to examine changing patterns of the different routes mentioned above in the Mediterranean Sea. Lastly, source quality describes the quality of the incident's information with the 1-5 level. Level 1 incidents are based solely on a media source, level 2 incidents are based on uncorroborated eyewitness or data from survey respondents, and level 3 are based on information from more than one media reports. On the other hand, level 4 incidents have to be based on information from at least one NGO, IGO, or another humanitarian actor with direct knowledge of the incident. Level 5 incident is the information from official sources such as coroners, medical examiners, or government officials from multiple humanitarian actors. Hence, the methodologies seeking for maximal accuracy and timeliness are employed. However, it is important to keep in mind that the data can only be seen as approximations due to the difficulty in obtaining these data. Nonetheless, the project’s data can serve as a good starting point to analyse the scale and trends of the routes that migrants take.  
+ All the analysis is done with the software R and Python. To make data comprehension easier, many graphs and charts are used to describe the data. Furthermore, ANOVA test is done to test the differences between the months. 
+
+
+
+
+
 
 ## Setup and basic data prepration
 
@@ -18,49 +76,115 @@ setwd("/Users/riyachanduka/Documents/GitHub/missing_migrants/")
 ```{r package_load, include=FALSE, cache=TRUE}
 # Load all required packages and install those that you don't already have
 install_and_load <- function(pkg) {
-  new.pkgs <- pkg[!(pkg %in% installed.packages()[,"Package"])]
-  if(length(new.pkgs))
-    install.packages(new.pkgs, repos="https://cran.rstudio.com/")
-
-  for(pkg_name in pkg)
-    library(pkg_name,character.only=TRUE, quietly = TRUE)
+  new.pkgs <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkgs))
+    install.packages(new.pkgs, repos = "https://cran.rstudio.com/")
+  
+  for (pkg_name in pkg)
+    library(pkg_name, character.only = TRUE, quietly = TRUE)
 }
-packages <- c("ggplot2", "plotly", "readr", "RColorBrewer", "tidyverse", "grid", "dplyr", "gridExtra"
-              ,"ggthemes", "ggfortify", "rworldmap", "lubridate", "reshape2", "forcats", "gganimate"
-              ,"animation", "gifski", "epitools", "scales", "withr", "transformr", "devtools", "magrittr")
+packages <-
+  c(
+    "ggplot2",
+    "plotly",
+    "readr",
+    "RColorBrewer",
+    "tidyverse",
+    "grid",
+    "dplyr",
+    "gridExtra", 
+    "ggthemes",
+    "ggfortify",
+    "rworldmap",
+    "lubridate",
+    "reshape2",
+    "forcats",
+    "gganimate", 
+    "animation",
+    "gifski",
+    "epitools",
+    "scales",
+    "withr",
+    "transformr",
+    "devtools",
+    #"magrittr",
+    "reticulate",
+    "knitr",
+    "rmarkdown"
+  )
 install_and_load(packages)
+
+# python setup
+use_python("/Users/dennis_hammerschmidt/anaconda2/bin/python3")
+import("numpy", as = "np")
+py_install("pandas")
+import("pandas", as = "pd")
+import("matplotlib.pyplot", as = "plt")
+py_install("seaborn")
+import("seaborn", as = "sns")
 ```
 
 We're using the [Missing Migrants dataset](https://missingmigrants.iom.int/downloads) from 2014 to 2019 (up to the most recent dataset available). In our case, this is the one from May XX.
 
 ```{r data_and_preparation, include=FALSE, cache=TRUE, warning=FALSE}
 # load the dataset
-missing <- read_csv("MissingMigrants-Global-2019-05-09T10-44-32.csv")
+missing <-
+  read_csv("MissingMigrants-Global-2019-05-09T10-44-32.csv")
 
 # simplify column names
-colnames(missing) <- c('id', 'region', 'date', 'year', 'month', 'num_dead', 'est_miss', 'total_dead_missing', 'num_surv', 'num_fem', 'num_male', 'num_child', 'cause', 'location', 'info', 'coord',
-                      'route', 'url', 'geo_group', 'source_qual')
+colnames(missing) <-
+  c(
+    'id',
+    'region',
+    'date',
+    'year',
+    'month',
+    'num_dead',
+    'est_miss',
+    'total_dead_missing',
+    'num_surv',
+    'num_fem',
+    'num_male',
+    'num_child',
+    'cause',
+    'location',
+    'info',
+    'coord',
+    'route',
+    'url',
+    'geo_group',
+    'source_qual'
+  )
 
 # create new data variable and fix the month variable
-missing$month <- match(missing$month,month.abb)
+missing$month <- match(missing$month, month.abb)
 missing$date2 <- paste0(missing$year, "/", missing$month, "/01")
 date_helper <- as.month(missing$date2, format = "%Y/%m/%d")
 missing$date2 <- date_helper$dates
-missing$month <- format(missing$date2,"%m")
+missing$month <- format(missing$date2, "%m")
 
 # create longitude and latitude from the coordinates variable and make them numeric
-missing <- separate(missing, into = c("lat","lon"), coord, sep = ",")
+missing <-
+  separate(missing, into = c("lat", "lon"), coord, sep = ",")
 missing$lon <- as.numeric(missing$lon)
 missing$lat <- as.numeric(missing$lat)
 
 # filter for missings in the date, latitude and longitude
-missing <- missing %>% 
+missing <- missing %>%
   filter(!is.na(date2) & !is.na(lon) & !is.na(lat))
 
 # replace NAs in missing and dead with 0 (for computational purposes)
-missing[c("est_miss", "num_dead", "num_surv",
-          "num_fem", "num_male", "num_child")][is.na(missing[c("est_miss", "num_dead", "num_surv",
-          "num_fem", "num_male", "num_child")])] <- 0
+missing[c("est_miss",
+          "num_dead",
+          "num_surv",
+          "num_fem",
+          "num_male",
+          "num_child")][is.na(missing[c("est_miss",
+                                        "num_dead",
+                                        "num_surv",
+                                        "num_fem",
+                                        "num_male",
+                                        "num_child")])] <- 0
 
 # replace NAs in route and region with unkown
 missing[c("route")][is.na(missing[c("route")])] <- "Unkown"
@@ -68,23 +192,91 @@ missing[c("region")][is.na(missing[c("region")])] <- "Unkown"
 
 # subset the dataset to include only variables of interest
 
-missing <- subset(missing, select = c("id", "region", "date2", "year", "month", "num_dead", "est_miss", "total_dead_missing", "num_surv", "num_fem", "num_male", "num_child", "cause", "lon", "lat", "route", "source_qual"))
+missing <-
+  subset(
+    missing,
+    select = c(
+      "id",
+      "region",
+      "date2",
+      "year",
+      "month",
+      "num_dead",
+      "est_miss",
+      "total_dead_missing",
+      "num_surv",
+      "num_fem",
+      "num_male",
+      "num_child",
+      "cause",
+      "lon",
+      "lat",
+      "route",
+      "source_qual"
+    )
+  )
 ```
 
 ## First descriptive: Where did people go missing the most?
 
+<!-- ```{python, cache = TRUE} -->
+<!-- # import numpy as np -->
+<!-- # import pandas as pd -->
+<!-- # import matplotlib.pyplot as plt -->
+
+<!-- r.missing.groupby('region')['num_dead'].sum().to_frame().plot(kind = "bar") -->
+<!-- ``` -->
+
+<!-- ```{python, cache = TRUE} -->
+<!-- ## Doesn't work the way it does in python -->
+
+<!-- # import pandas as pd -->
+<!-- # r.missing['total_dead_missing'] = pd.to_numeric(r.missing.total_dead_missing, errors='coerce') -->
+<!-- # r.missing.groupby('region')['total_dead_missing'].sum().to_frame().plot(kind = "bar") -->
+<!-- ``` -->
+
+<!-- ```{python, cache = TRUE} -->
+<!-- Total = r.missing['num_surv'].sum() -->
+<!-- Survival = r.missing.groupby(['month']).agg({'num_surv': 'sum'}) -->
+<!-- Survival['survival_rate']=(Survival['num_surv']/Total)*100 -->
+<!-- #Survival=Survival.reset_index() -->
+<!-- #months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",  -->
+<!--           #"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] -->
+<!-- #Survival['month'] = pd.Categorical(Survival['month'], ordered=True) -->
+<!-- #Survival.sort_values('month') -->
+<!-- import seaborn as sns -->
+
+<!-- sns.pointplot(x="month", y="survival_rate", data=Survival) -->
+<!-- ``` -->
+
+
 ```{r regions_and_year, warning=FALSE}
 # create regions data that includes the sum of missings and dead migrants per year for each region
 regions <- missing %>%
-  group_by(region,year) %>%
+  group_by(region, year) %>%
   dplyr::summarise(sum(est_miss), sum(num_dead))
 
 regions <- as.data.frame(regions)
-colnames(regions) <- c("region","year","missing","dead")
+colnames(regions) <- c("region", "year", "missing", "dead")
 regions <- melt(regions, id.vars = c("region", "year"))
 
 # define position ordering for graph
-positions <- c("Unknown", "East Asia", "North America", "South America", "Caribbean", "Europe", "Sub-Saharan Africa", "Central America incl. Mexico", "Horn of Africa", "Southeast Asia", "U.S./Mexico Border", "North Africa", "Mediterranean")
+positions <-
+  c(
+    "Unknown",
+    "East Asia",
+    "North America",
+    "South America",
+    "Caribbean",
+    "Europe",
+    "Sub-Saharan Africa",
+    "Central America incl. Mexico",
+    "Horn of Africa",
+    "Southeast Asia",
+    "U.S./Mexico Border",
+    "North Africa",
+    "Mediterranean"
+  )
 
 # plot the total number of missings and dead across regions and years
 incident_region <- ggplot(regions) +
@@ -96,28 +288,35 @@ incident_region <- ggplot(regions) +
   scale_x_discrete(limits = positions) +
   labs(fill = "Incident") +
   facet_wrap(vars(year))
-
+# uncomment for html output
+incident_region
 # use ggplotly for interactive exploration
-ggplotly(incident_region)
+# ggplotly(incident_region)
 ```
 
 As we see and suspected before, most incidences happen at the Mediterranean Sea.
 
 ```{r stacked_bar_total, message=FALSE, warning=FALSE}
 # subset only for the Mediterranean Sea
-missing_medsea <- subset(missing, region=="Mediterranean")
+missing_medsea <- subset(missing, region == "Mediterranean")
 
 # create regions data only for Mediterranean Sea that also includes the number of people surviving an incident
 region_med <- missing_medsea %>%
-  group_by(route,year) %>%
+  group_by(route, year) %>%
   dplyr::summarise(sum(est_miss), sum(num_dead), sum(num_surv))
 
 region_med <- as.data.frame(region_med)
-colnames(region_med) <- c("route","year","missing","dead", "survived")
+colnames(region_med) <-
+  c("route", "year", "missing", "dead", "survived")
 region_med <- melt(region_med, id.vars = c("route", "year"))
 
 # reduce the name of the routes to their direction (since we're only in the Mediterranean Sea)
-route_short <- c("Central Mediterranean"="Central" ,"Western Mediterranean"="Western", "Eastern Mediterranean"="Eastern")
+route_short <-
+  c(
+    "Central Mediterranean" = "Central" ,
+    "Western Mediterranean" = "Western",
+    "Eastern Mediterranean" = "Eastern"
+  )
 region_med$route <- as.character(route_short[region_med$route])
 
 # define position ordering for graph
@@ -125,45 +324,80 @@ positions2 <- c("Central", "Western", "Eastern")
 
 # plot the total number of missings and dead across regions and years
 surv_or_not <- ggplot(region_med) +
-  geom_bar(aes(x = route, y = value, fill = variable), 
-               stat = 'identity', position = 'fill') +
+  geom_bar(aes(x = route, y = value, fill = variable),
+           stat = 'identity',
+           position = 'fill') +
   scale_y_continuous(labels = scales::percent) +
   labs(x = "Regions", y = "Percentage of incidents") +
   scale_x_discrete(limits = positions2) +
   labs(fill = "Incident") +
-  facet_wrap(vars(year)) 
-
+  facet_wrap(vars(year))
+# uncomment for html output
+surv_or_not
 # use ggplotly for visualization and round the percentage of stacked bar chart by 2 digits
-with_options(list(digits = 1), ggplotly(surv_or_not)) 
+# with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
 
 ```{r by_month, message=FALSE, warning=FALSE}
 monthly <- missing_medsea %>%
-	 group_by(year,month) %>%
-	 dplyr::summarise(sum(total_dead_missing), sum(num_surv))
-	
+  group_by(year, month) %>%
+  dplyr::summarise(sum(total_dead_missing), sum(num_surv))
+
 monthly <- as.data.frame(monthly)
-colnames(monthly) <- c("year", "month","dead/missing", "survived")
+colnames(monthly) <- c("year", "month", "dead/missing", "survived")
 monthly <- melt(monthly, id.vars = c("year", "month"))
-	
-	# make the name of the routes shorter
-mon_abb <- c("01"="Jan" ,"02"="Feb", "03"="Mar", "04"="Apr", "05"="May", "06"="Jun", "07"="Jul", "08"="Aug", "09"="Sep", "10"="Oct", "11"="Nov", "12"="Dec")
+
+# make the name of the routes shorter
+mon_abb <-
+  c(
+    "01" = "Jan" ,
+    "02" = "Feb",
+    "03" = "Mar",
+    "04" = "Apr",
+    "05" = "May",
+    "06" = "Jun",
+    "07" = "Jul",
+    "08" = "Aug",
+    "09" = "Sep",
+    "10" = "Oct",
+    "11" = "Nov",
+    "12" = "Dec"
+  )
 monthly$month <- as.character(mon_abb[monthly$month])
-	
-monthly$month <- factor(monthly$month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
-	
-	# plot the total number of missings and dead across regions and years
+
+monthly$month <-
+  factor(
+    monthly$month,
+    levels = c(
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    )
+  )
+
+# plot the total number of missings and dead across regions and years
 by_month <- ggplot(monthly) +
-	 geom_bar(aes(x = year, y = value, fill = variable),
-	         stat = 'identity',
-	         position = 'dodge') +
-	 #coord_flip() +
-	 labs(x = "Months", y = "Total number of incidents") +
-	 labs(fill = "Incident") +
-	 theme(axis.text.x = element_text(angle = 45)) +
-	 facet_wrap(vars(month), nrow = 2, ncol = 6) 
-	
-ggplotly(by_month)
+  geom_bar(aes(x = year, y = value, fill = variable),
+           stat = 'identity',
+           position = 'dodge') +
+  #coord_flip() +
+  labs(x = "Months", y = "Total number of incidents") +
+  labs(fill = "Incident") +
+  theme(axis.text.x = element_text(angle = 45)) +
+  facet_wrap(vars(month), nrow = 2, ncol = 6)
+# uncomment for html output
+by_month
+# for animated output
+# ggplotly(by_month)
 ```
 
 
@@ -172,21 +406,38 @@ ggplotly(by_month)
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
 # define axis, shape and visual display of the map
-map <-ggplot() + 
-  geom_map(data = worldMap, map = worldMap,aes(x = long, y = lat, map_id = region, group = group),fill = "white", color = "black", size = 0.25)
+map <- ggplot() +
+  geom_map(
+    data = worldMap,
+    map = worldMap,
+    aes(
+      x = long,
+      y = lat,
+      map_id = region,
+      group = group
+    ),
+    fill = "white",
+    color = "black",
+    size = 0.25
+  )
 
 # plot the map with total number of dead and missing migrants including the three routes in the Mediterranean Sea
-med_map <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
-        geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.2) +
-        theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
-        scale_color_brewer(palette='Set1') + 
-        theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
-        xlab('') + ylab('') + 
-        ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
-      xlim(c(-8, 42))
+med_map <-
+  map + geom_point(aes(x = lon, y = lat, size = total_dead_missing),
+                   alpha = 0.5,
+                   data = missing_medsea) +
+  geom_path(aes(lon, lat, col = route), data = missing_medsea, alpha =
+              0.2) +
+  theme_fivethirtyeight(base_size = 10, base_family = "sans") +
+  scale_color_brewer(palette = 'Set1') +
+  theme(axis.text.x = element_text(size = 8, angle = 90),
+        legend.position = 'top') +
+  xlab('') + ylab('') +
+  ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) +
+  xlim(c(-8, 42))
 med_map
 # optionally: use ggplotly for visualization. Caution: takes some time to run!
-#ggplotly(med_map)
+# ggplotly(med_map)
 ```
 
 ```{r map_animated, cache = TRUE, message=FALSE, warning=FALSE}
@@ -195,18 +446,23 @@ med_map
 # library(transformr)
 
 # create an animated map for the total number of dead and missing migrants as well as the three routes on the Mediterranean Sea over the entire time frame of the dataset
-mapanimated <- map + geom_point(aes(x = lon, y = lat, size=total_dead_missing), alpha=0.5, data = missing_medsea) +
-      geom_path(aes(lon,lat,col=route),data=missing_medsea,alpha=0.3) +
-      theme_fivethirtyeight(base_size = 10, base_family = "sans") + 
-      scale_color_brewer(palette='Set1') + 
-      theme(axis.text.x = element_text(size=8,angle=90),legend.position='top') +
-      xlab('') + ylab('') + 
-      ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) + 
+mapanimated <-
+  map + geom_point(aes(x = lon, y = lat, size = total_dead_missing),
+                   alpha = 0.5,
+                   data = missing_medsea) +
+  geom_path(aes(lon, lat, col = route), data = missing_medsea, alpha =
+              0.3) +
+  theme_fivethirtyeight(base_size = 10, base_family = "sans") +
+  scale_color_brewer(palette = 'Set1') +
+  theme(axis.text.x = element_text(size = 8, angle = 90),
+        legend.position = 'top') +
+  xlab('') + ylab('') +
+  ggtitle('Total incidents in the Mediterranean Sea') + ylim(c(29, 47)) +
   xlim(c(-8, 42)) +
   labs(title = 'Year: {frame_time}') +
-  transition_time(year) 
-
-mapanimated
+  transition_time(year)
+# uncomment for html output
+# mapanimated
 
 # optional: save the animation as .gif
 #anim_save("mapanimated.gif", animation = last_animation())
@@ -214,3 +470,9 @@ mapanimated
 ```
 
 
+##Discussion 
+ The present report tries to figure out the migration routes and the fatalities of it considering policy situation of the destination country and months a migrant start journey by using the data provided by IOM’s missing migrants project. A main findings is that the peak of fatalities occurs during the summer months, which contradicts the hypothesis of previous reports, that the number of deaths and missings is increasing because embarking is no longer restricted to good weather and sea conditions anymore. In addition, the total number of fatalities on each route decreases over time. However, the dataset does not include the total number of arrivals, which makes it difficult to interpret this finding. Another important result of the descriptive analysis is that the survival rate within an incident increases over time, suggesting that migration becomes safer. However, the present report has limitation in the fact that it mainly focuses on the descriptive analysis. As this report has presented the basic background behind migration flows, merging missing migrants data with external data is expected to bring synergy into the migration research. 
+ IOM has already demonstrated the advantages of big data in migration research [@black.2017a]. Big data refers to the new type of data and is often defined with 3V characteristics; Volume, Velocity, Variety [@Japec.2015]. Volume refers to its sheer big size of the data. Velocity indicates the rapid speed at which the real-time data is collected and lastly, variety means various forms in which data could exist without being limited to traditional structured data.
+ Following these trends, the use of big data for migration research has been constantly insisted. IOM suggested some examples of big data in migration research at its 2017 report [@black.2017b]. One example is the use of Automatic Identification System data (AIS). AIS is a maritime communications system and its information is mainly used to avoid collisions but as this information is gathered in a relatively short interval and covers the maritime movement, AIS data makes a systematic analysis of quantified migrant rescues in the ocean possible.
+ As AIS data example, combining missing migrants project data with other external big data is expected to broaden the migration research’s possibilities. In this regard, this report suggests combining the weather data with the missing migrants project’s data firstly, to improve the systematic analysis of fatality in migration journey and secondly, build safety guidelines for the migrants.
+ To begin with, even though the causes of deaths and missings are specified in the data, precise factors lead to the dangerousness is not described in the data and only months are presumed to affect the safety of journey. Since the deaths and missings mainly take place during the journey through the ocean, which is heavily affected by the ocean currents and weather, weather data might provide further explanation for the factors lead to a dangerous journey. Also, this report has revealed that summer months has significantly different results. On top of that, if the weather is found to be the main determinant of successful arrival, safety guideline for migrants and the administrations could be built by exploring the weather and the location. To be specific, it could inform migrants who intend to take a specific migration route at specific weather, specific season and location the dangerousness level of the journey based on previous data. Also, based on the weather and the routes, the administrations could reinforce its rescue-ship infrastructure.  However, due to a budget issue, this report couldn’t implement weather data into the analysis. Future improvement by researchers is expected. 

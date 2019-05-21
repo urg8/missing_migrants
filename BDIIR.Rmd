@@ -70,8 +70,7 @@ The number of deaths indicates the total number of people confirmed dead in an i
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::knit_engines$set(python = reticulate::eng_python)
-setwd("/Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/")
+setwd("/Users/riyachanduka/Documents/GitHub/missing_migrants/")
 ```
 
 ```{r package_load, include=FALSE, cache=TRUE}

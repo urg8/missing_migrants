@@ -12,7 +12,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("/Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/")
+setwd("/Users/riyachanduka/Documents/GitHub/missing_migrants/")
 ```
 
 ```{r package_load, include=FALSE, cache=TRUE}

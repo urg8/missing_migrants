@@ -40,7 +40,7 @@ bibliography: references
 
  The number of migrants, especially forced migrants are increasing at a rapid phase worldwide. According to the 2018 report from the International Organization for Migration (IOM) [@IOMsGlobalMigrationDataAnalysisCentre.2018], 68.5 million individuals are forced to migrate in 2017 because of persecution, conflict, generalized violence, or human rights violations. The issue gets notably salient in 2015 following so-called ‘refugee crisis’ due to the Syrian civil war.
   Meanwhile, on 2nd September 2015, the picture of drowned 3-year-old Syrian boy, Aylan Kurdi in the Mediterranean Sea alarmed the world the seriousness of the issue and the difficulties which migrants face during their journey. However, despite its political saliency, there are still a lot of data gaps in migration research. IOM pointed out the issue in its 2018 report, insisting the necessity to fill out data gaps in the topics such as irregular migration, missing migrants and migration flows.
- “Missing Migrants Project [@IOM.2019]” by International Organization for Migration (IOM) began to fill the gap in quantitative data concerning migrants’ journey after the tragic accident at October 2013, when two ships have wrecked near the Italian island of Lampedusa which caused the death of at least 368 individuals. Missing migrants project tracks the missing of refugees and asylum-seekers during their migration journey combining different data sources. By providing information about missing migrants, missing migrants project not only notify the world with the precarious situation migrants face but also point out the possible improvement in regulatory or administrative system to ensure safe migration journey. This achievement is important to tackle the United Nations’ Sustainable Development Goals (SDGs) [@GlobalMigrationDataPortal.n.d.]. Migration is a cross-cutting issue that is relevant to all SDGs. The Agenda’s core principle is “leaving no one behind”. Especially Goal 10.7 underlines an “orderly, safe, regular and responsible migration and mobility of people”. Therefore, it is mandatory to understand patterns of migrants’ journeys in order to achieve this goal by 2030.  The number of missing migrants can serve as a helpful indicator. However, the data of the project should be seen as approximations because the true number of missing migrants is unknown. It is not possible to report all deaths and disappearances because many bodies will never be found or identified.
+ “Missing Migrants Project [@IOM.2019]” by International Organization for Migration (IOM) began to fill the gap in quantitative data concerning migrants’ journey after the tragic accident at October 2013, when two ships have wrecked near the Italian island of Lampedusa which caused the death of at least 368 individuals. Missing migrants project tracks the missing of refugees and asylum-seekers during their migration journey combining different data sources. By providing information about missing migrants, missing migrants project not only notify the world with the precarious situation migrants face but also point out the possible improvement in regulatory or administrative system to ensure safe migration journey. This achievement is important to tackle the United Nations’ Sustainable Development Goals (SDGs) [@GlobalMigrationDataPortal.2019.]. Migration is a cross-cutting issue that is relevant to all SDGs. The Agenda’s core principle is “leaving no one behind”. Especially Goal 10.7 underlines an “orderly, safe, regular and responsible migration and mobility of people”. Therefore, it is mandatory to understand patterns of migrants’ journeys in order to achieve this goal by 2030.  The number of missing migrants can serve as a helpful indicator. However, the data of the project should be seen as approximations because the true number of missing migrants is unknown. It is not possible to report all deaths and disappearances because many bodies will never be found or identified.
  IOM has recognized the importance of adopting the big data in migration research to fill the gap in quantitative data [@Black.2017a]. With acknowledgement of necessity to implement big data, Missing migrants project combine various sources and type of data to track the missing migrants information, from national authorities to interviews of migrants. 
  To dedicate to the aim of the missing migrants project, this report tries to explain the present of migration route and the dangerousness of different routes in the Mediterranean area, taking full advantage of the data offered by missing migrants project. Since migration is a continuous process that never stops, it is necessary to keep a constant eye on the changing patterns of migrants' travel. Therefore, this report analyses different routes of migrants in the Mediterranean Sea and compares changes over time. Also, this report tries to figure out possible factors affecting the journey to prevent further incident. To achieve this aim, this report begins by explaining the various migration routes, especially focusing on three different routes in the Mediterranean area. Then this report proceeds to explain the missing migrants project and the uniqueness of the data, along with the necessity to use big data for migration research. After that, death and missing of migrants on those routes are presented, suggesting the possible cause of dangerousness of the routes. Lastly, the report discusses the limitation of the report and suggest a possible improvement of the report by combining the data with weather data. 
 
@@ -260,7 +260,7 @@ incident_region
 
 The implementation of the agreement and the associated increase in the use of the central routes serves as an explanation why incidents in South Asia decreased in 2016 and increased simultaneously in Sub Saharan Africa and the Horn of Africa. A closer look at the three different routes also reveals different patterns over time. 
 
-```{r, out.width = "500px", fig.cap="Total Number of Incidents over time"}
+```{r, out.width = "500px", fig.cap="Total Number of Incidents in the Mediterranean over time"}
 # This result was created in the accompanying python jupyter notebook
 knitr::include_graphics('images/Total_Number_of_Deaths_and_Missing.png')
 ```
@@ -373,48 +373,11 @@ by_month
 # ggplotly(by_month)
 ```
 
-Another hypothesis of earlier reports as to why the rate of deaths and missings has increased was that embarking is no longer restricted to good weather and sea conditions. To answer this question, the number of incidents per months can serve as an indicator, assuming that conditions are better in the summer months from May to September are better than in the winter months from October to April (see figure 4). A descriptive analysis shows that each year, most incidents happen from May to September. To analyse this question more detailed, a One-way Anova test was performed. Whereas the null hypothesis assumes no difference between means, the alternative hypthesis states that a difference between means exist. The following results were obtained
-
-```{r, fig.cap="OLS Output"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/ANOVA_Test_results.png')
-```
-
-```{r, fig.cap="Overall ANOVA Result"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/Anova_Overall.png')
-```
-
-For significance value 0.05, overall the model is significant, F= 2.115, p = 0.0171. The p-value is less than the significance level, so the null hypothesis is rejected and it can be concluded that not all of population means are equal. Hence, there is a significant difference in the number of fatalities across months. The Tukey post-hoc test reveals exactly where those differences lie, by comparing all possible pairs of means. It controls for type I error and maintains the familywise error rate at 0.05 (FWER= 0.05 top of the table). 
-
-```{r, fig.cap="Tuckey test results I"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/Post-AD-HOC-testing1.png')
-```
-
-```{r, fig.cap="Tuckey test results I"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/Post-AD-HOC-testing2.png')
-```
-
-The group1 and group2 columns are the groups being compared, the meandiff column is the difference in means of the two groups being calculated as group2 – group1, and the reject column states whether or not the null hypothesis should be rejected. In this case, even if the ANOVA is siginificant, a comparison of each month doesn't represent significant differences. However, to answer the question if there is a significant difference in the number of people deaths and missing between the seasons, months were grouped into Summer (May-September) and Winter (October-April). To test this a two sample t-test was conducted. The hypothesis being tested is:
-
-Null hypothesis: u1 = u2, which translates to the mean of summer months is equal to the mean of winter months
-Alternative hypothesis: u1 ? u2, which translates to the mean of summer months is not equal to the mean of winter months
-
-```{r, fig.cap="T-Test descriptive"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/t-test_descriptive.png')
-```
-
-```{r, fig.cap="T-Test results"}
-# This result was created in the accompanying python jupyter notebook
-knitr::include_graphics('images/T-test_table.png')
-```
-
-Summer season average deaths and missing (M= 24.465, SD= 59.91) is larger and has slightly larger variation than Winter season (M= 12.995, SD= 34.206). There is a statistically significant difference between the Total deaths and missings in Summer and Winter season (t(996)= 9.3.846, p= 0.0001, r= 0.1210). Hence, the hypothesis that the proportion of deaths and missings has increased because embarking is no longer restricted to good weahter conditions cannot be confirmed by the data used in this report. 
-
-To sum up the results, this report can confirm, that most of the deadly incidents occur in the Mediterranean area. A trend, which is consistent over time. Moreover, the data underline the different patterns of each route reported in former articles (figure 5). 
+Another hypothesis of earlier reports as to why the rate of deaths and missings has increased was that embarking is no longer restricted to good weather and sea conditions. To answer this question, the number of incidents per months can serve as an indicator, assuming that conditions in the summer months - from May to September - are better than in the winter months - from October to April - (see figure 4). A descriptive analysis shows that each year, most incidents happen from May to September. To analyse this question in more detail, a One-way Anova test is performed. Whereas the null hypothesis assumes no difference between means, the alternative hypthesis states that a difference between means exist. 
+For significance value 0.05, overall model is significant (F= 2.115, p = 0.0171). The p-value is less than the significance level, so the null hypothesis is rejected so it can be concluded that not all of population means are equal. Hence, there is a significant difference in the number of fatalities across months. The Tukey's post-hoc test reveals exactly where those differences lie, by comparing all possible pairs of means. It controls for type I error and maintains the familywise error rate at 0.05 (for whole results, see appendix). 
+However, even though the ANOVA is siginificant, a comparison of each month doesn't represent significant differences. In that, to answer the question if there is a significant difference in the number of deaths and missing between the seasons, months are grouped into Summer (May-September) and Winter (October-April). To test this, a two sample t-test is conducted. Null hypothesis is that the mean of summer months is equal to the mean of winter months and alternative hypothesis is that the mean of summer months is not equal to the mean of winter months .
+T-test reveals that summer season's average deaths and missing (M= 24.465, SD= 59.91) is larger and has slightly larger variation than Winter season (M= 12.995, SD= 34.206). There is a statistically significant difference between the Total deaths and missings in Summer and Winter season (t(996)= 9.3.846, p= 0.0001, r= 0.1210). Hence, the hypothesis that the proportion of deaths and missings has increased because embarking is no longer restricted to good weahter conditions cannot be confirmed by the data used in this report (for whole results, see appendix). 
+To sum up the results, this report can confirm, that most of the deadly incidents occur in the Mediterranean area. A trend is consistent over time. Moreover, the data underline the different patterns of each route reported in former articles (figure 5). 
 
 ```{r map_static, cache=TRUE, message=FALSE, warning=FALSE, fig.cap="Incident and route map"}
 # intiatlize a simple map
@@ -484,12 +447,44 @@ mapanimated <-
 
 ```
 
-The results mirror the consequences of the EU-Turkey agreement. After the implementation, the number of deaths and missings increased on the Central Mediterranean route and declined on the Eastern Mediterranean route. The incidents on the Western Mediterranean route are also on the increase over time. Although the literature claims that the proportion of deaths is increasing, the report reveals that the proportion of survivors within an incident is increasing rather than decreasing. A finding, which is partly due to a smaller number migrants involved per incidents and possibly also to better rescue techniques. This has important implications for the UN’s Sustainability Agenda 2030. According to the results, the likelihood of dying in case of an event decreases. This indicates that migration is becoming safer. A step towards achieving SDG goal 10.7, which aims at orderly and safe migration. However, it should be noted that due to difficulties in obtaining data on deaths and missing migrants, the results can only be seen as an approximation.
+The results mirror the consequences of the EU-Turkey agreement. After the implementation, the number of deaths and missings increased on the Central Mediterranean route and declined on the Eastern Mediterranean route. The incidents on the Western Mediterranean route are also on the increase over time. Although the literature claims that the proportion of deaths is increasing, the report reveals that the proportion of survivors within an incident is increasing rather than decreasing. A finding, which is partly due to a smaller number migrants involved per incidents and possibly also to better rescue techniques. This has important implications for the UN’s Sustainability Agenda 2030. According to the results, the likelihood of dying in case of an event decreases. This indicates that migration is becoming safer and it goes towards achieving SDG goal 10.7, which aims at orderly and safe migration. However, it should be noted that due to difficulties in obtaining data on deaths and missing migrants, the results can only be seen as an approximation.
 
 ## Discussion 
- The present report tries to figure out the migration routes and the fatalities of it considering policy situation of the destination country and months a migrant start journey by using the data provided by IOM’s missing migrants project. A main findings is that the peak of fatalities occurs during the summer months, which contradicts the hypothesis of previous reports, that the number of deaths and missings is increasing because embarking is no longer restricted to good weather and sea conditions anymore. In addition, the total number of fatalities on each route decreases. However, the dataset does not include the total number of arrivals, which makes it difficult to interpret this finding. Another important result of the descriptive analysis is that the survival rate within an incident increases over time, suggesting that migration has become safer, bringing the SDG goal closer to being achieved. However, the present report has limitation in the fact that it mainly focuses on the descriptive analysis. As this report has presented the basic background behind migration flows, merging missing migrants data with external data is expected to bring synergy into the migration research. 
+ The present report tries to figure out the migration routes and the fatalities of it considering policy situation of the destination country and months a migrant start journey by using the data provided by IOM’s missing migrants project. A main findings is that the peak of fatalities occurs during the summer months, which contradicts the hypothesis of previous reports, that the number of deaths and missings is increasing because embarking is no longer restricted to good weather and sea conditions anymore. In addition, the total number of fatalities on each route decreases. However, the dataset does not include the total number of arrivals, which makes it difficult to generalize this finding. Another important result of the descriptive analysis is that the survival rate within an incident increases over time, suggesting that migration has become safer, bringing the SDG goal closer to being achieved. However, the present report has limitation in the fact that it mainly focuses on the descriptive analysis. As this report has presented the basic background behind migration flows, merging missing migrants data with external data is expected to bring synergy into the migration research. 
  IOM has already demonstrated the advantages of big data in migration research [@Black.2017a]. Big data refers to the new type of data and is often defined with 3V characteristics; Volume, Velocity, Variety [@Japec.2015]. Volume refers to its sheer big size of the data. Velocity indicates the rapid speed at which the real-time data is collected and lastly, variety means various forms in which data could exist without being limited to traditional structured data.
  Following these trends, the use of big data for migration research has been constantly insisted. IOM suggested some examples of big data in migration research at its 2017 report [@Black.2017b]. One example is the use of Automatic Identification System data (AIS). AIS is a maritime communications system and its information is mainly used to avoid collisions but as this information is gathered in a relatively short interval and covers the maritime movement, AIS data makes a systematic analysis of quantified migrant rescues in the ocean possible.
  As AIS data example, combining missing migrants project data with other external big data is expected to broaden the migration research’s possibilities. In this regard, this report suggests combining the weather data with the missing migrants project’s data firstly, to improve the systematic analysis of fatality in migration journey and secondly, build safety guidelines for the migrants.
  To begin with, even though the causes of deaths and missings are specified in the data, precise factors lead to the dangerousness is not described in the data and only months are presumed to affect the safety of journey. Since the deaths and missings mainly take place during the journey through the ocean, which is heavily affected by the ocean currents and weather, weather data might provide further explanation for the factors lead to a dangerous journey. Also, this report has revealed that summer months has significantly different results. On top of that, if the weather is found to be the main determinant of successful arrival, safety guideline for migrants and the administrations could be built by exploring the weather and the location. To be specific, it could inform migrants who intend to take a specific migration route at specific weather, specific season and location the dangerousness level of the journey based on previous data. Also, based on the weather and the routes, the administrations could reinforce its rescue-ship infrastructure.  However, due to a budget issue, this report couldn’t implement weather data into the analysis. Future improvement by researchers is expected. 
+ 
+ 
+ ## Appendix 
 
+```{r, fig.cap="OLS Output"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/ANOVA_Test_results.png')
+```
+
+```{r, fig.cap="Overall ANOVA Result"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Anova_Overall.png')
+```
+
+```{r, fig.cap="Tuckey test results I"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Post-AD-HOC-testing1.png')
+```
+
+```{r, fig.cap="Tuckey test results I"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Post-AD-HOC-testing2.png')
+```
+
+```{r, fig.cap="T-Test descriptive"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/t-test_descriptive.png')
+```
+
+```{r, fig.cap="T-Test results"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/T-test_table.png')
+```

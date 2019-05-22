@@ -61,15 +61,8 @@ The literature review reports that the patterns and dangers of the Mediterranean
 The number of deaths indicates the total number of people confirmed dead in an incident. The people who are presumed to be dead due to an incident such as shipwrecks are left to be blank. Meanwhile, the number of missing migrants covers the shipwreck in general. It is recorded by subtracting the number of bodies recovered and the number of survivors from the total original number of migrants on the boat. The information also relies on a report by surviving migrants or witness. Where there are no reported missing migrants, it is left blank. The age of decedents is occasionally substituted with estimated age range. If it is not reported, it is left blank. Region of origin of the decedent's are at times recorded as ‘Presumed’ or (P) and if it is unknown, ‘unknown’ is recorded. When the cause of death could not be identified, the reason for the missing of identification is recorded (e.g., Unknown - Skeletal remains only). Migration routes show the migration route where the incident took place. With the help of this variable it is possible to examine changing patterns of the different routes mentioned above in the Mediterranean Sea. Lastly, source quality describes the quality of the incident's information with the 1-5 level. Level 1 incidents are based solely on a media source, level 2 incidents are based on uncorroborated eyewitness or data from survey respondents, and level 3 are based on information from more than one media reports. On the other hand, level 4 incidents have to be based on information from at least one NGO, IGO, or another humanitarian actor with direct knowledge of the incident. Level 5 incident is the information from official sources such as coroners, medical examiners, or government officials from multiple humanitarian actors. Hence, the methodologies seeking for maximal accuracy and timeliness are employed. However, it is important to keep in mind that the data can only be seen as approximations due to the difficulty in obtaining these data. Nonetheless, the project’s data can serve as a good starting point to analyse the scale and trends of the routes that migrants take.  
  All the analysis is done with the software R and Python. To make data comprehension easier, many graphs and charts are used to describe the data. Furthermore, ANOVA test is done to test the differences between the months. 
 
-
-
-
-
-
-## Setup and basic data prepration
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 setwd("/Users/dennis_hammerschmidt/Dropbox/missing_migrants/missing_migrants/")
 ```
 
@@ -123,6 +116,7 @@ import("matplotlib.pyplot", as = "plt")
 py_install("seaborn")
 import("seaborn", as = "sns")
 ```
+
 ## Results
 
 The following section presents the results based on the latest available data from the [IOM's Missing Migrants Project](https://missingmigrants.iom.int/downloads) from 2014 to 2019 (up to the most recent dataset available). In the case of this report, this is the one from May, 09 2019. Hereby, the analysis concentrates on different patterns of different routes and their changes over time. Of particular interest are changes by months and the development of survival rates per incidents. 
@@ -217,40 +211,10 @@ missing <-
     )
   )
 ```
+
 As already suspected by literature, most fatalities occur in the Mediterranean region (see figure 1). This finding is stable over all years. During the peak of the “refugee crisis” in 2015, the number of missings and deaths reached its maximum. Although the total number of incidents decreases year to year, the general trend that most deaths and disappearance are reported in the Mediterranean continues until 2019. Figure 1 confirms the hypothesis in other reports that many migrants die before they reach the country of departure. This is emphasized by the changing patterns of incidentes in Southeast Asia and Africa, reflecting the development of migration following the implementation of the EU-Turkey Agreement in March 2016. As already stated in the theoretical background, the Eastern Mediterranean route, mainly used by migrants from the Middle East and South Asia, lost its importance due to the changing circumstances for migrants after the announcement. Hence, the new preferred option of migrants goes through Africa and and the route of the Central Mediterranean is increasingly being used.
 
-<!-- ```{python, cache = TRUE} -->
-<!-- # import numpy as np -->
-<!-- # import pandas as pd -->
-<!-- # import matplotlib.pyplot as plt -->
-
-<!-- r.missing.groupby('region')['num_dead'].sum().to_frame().plot(kind = "bar") -->
-<!-- ``` -->
-
-<!-- ```{python, cache = TRUE} -->
-<!-- ## Doesn't work the way it does in python -->
-
-<!-- # import pandas as pd -->
-<!-- # r.missing['total_dead_missing'] = pd.to_numeric(r.missing.total_dead_missing, errors='coerce') -->
-<!-- # r.missing.groupby('region')['total_dead_missing'].sum().to_frame().plot(kind = "bar") -->
-<!-- ``` -->
-
-<!-- ```{python, cache = TRUE} -->
-<!-- Total = r.missing['num_surv'].sum() -->
-<!-- Survival = r.missing.groupby(['month']).agg({'num_surv': 'sum'}) -->
-<!-- Survival['survival_rate']=(Survival['num_surv']/Total)*100 -->
-<!-- #Survival=Survival.reset_index() -->
-<!-- #months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",  -->
-<!--           #"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] -->
-<!-- #Survival['month'] = pd.Categorical(Survival['month'], ordered=True) -->
-<!-- #Survival.sort_values('month') -->
-<!-- import seaborn as sns -->
-
-<!-- sns.pointplot(x="month", y="survival_rate", data=Survival) -->
-<!-- ``` -->
-
-
-```{r regions_and_year, warning=FALSE}
+```{r regions_and_year, warning=FALSE, fig.cap="Total number of missings and deaths by region"}
 # create regions data that includes the sum of missings and dead migrants per year for each region
 regions <- missing %>%
   group_by(region, year) %>%
@@ -296,11 +260,14 @@ incident_region
 
 The implementation of the agreement and the associated increase in the use of the central routes serves as an explanation why incidents in South Asia decreased in 2016 and increased simultaneously in Sub Saharan Africa and the Horn of Africa. A closer look at the three different routes also reveals different patterns over time. 
 
-![Total Number of Incidents over time] (images/Total_Number_of_Deaths_and_Missing.png ) 
+```{r, out.width = "500px", fig.cap="Total Number of Incidents over time"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Total_Number_of_Deaths_and_Missing.png')
+```
  
 Figure 2 shows the total number of deaths and missings per incident over time. Firstly, it stands out, that the Central Mediterranean route is responsible for most deaths and missings. This is consistent with literature in which the IOM declares the route to be the most dangerous migration route in the world. Even before the peak of the migration crisis in 2015, many migrants died crossing the Mediterranean from Africa to Italy. Another peak of fatalities is in 2016, which may also be a consequence of the increased use of this road after the implementation of the EU-Turkey agreement. The consequences of this agreement is also present in the analysis of the patterns of the Eastern Mediterranean route. After 2016 the number of deaths decreased which is due to less intensive use of this route. Looking at the Western Mediterranean route, the number of deaths and missings has increased from year to year. This finding is also consistent with literature which mentions in reports that this route is becoming increasingly dangerous. In summary, the overall trend is that the number of deaths and missings is decreasing. Nevertheless, according to the literature, the number of dead migrates increases compared to the decreasing number of migrates. Hence, the reports indicate that migration is becoming more dangerous. 
 
-```{r stacked_bar_total, message=FALSE, warning=FALSE}
+```{r stacked_bar_total, message=FALSE, warning=FALSE, fig.cap="Precentage of incident by Mediterranean route"}
 # subset only for the Mediterranean Sea
 missing_medsea <- subset(missing, region == "Mediterranean")
 
@@ -341,9 +308,10 @@ surv_or_not
 # use ggplotly for visualization and round the percentage of stacked bar chart by 2 digits
 # with_options(list(digits = 1), ggplotly(surv_or_not)) 
 ```
+
 Comparing the proportion of deaths and survivors within an incident, the data pictures a more positive view of changing patterns of migration over time (figure 3). At first glance, it is striking that the percentage of survivor was lowest in 2014. However, one has to keep in mind that the survival rate is not based on the total number of arrivals in the destination country but on the number of survivors within a reported incident. Starting with the Eastern Mediterranean route, the figure shows that each year the percentage of survivors within an incident increases. While only 32 percent survived in 2014, the survival rate rose to 71 percent in 2017 and up to 90 percent in 2019. This finding may be due to the fact that smugglers used smaller boats after the implementation of the EU-Turkey agreement to avoid detection by authorities. Fewer people on the boats facilitate rescue operation by lifeguard boats in the event of any difficulties at sea, thus increasing the survival rate. When focussing on the Central  Mediterranean route, no clear pattern can be displayed. As on every route, the survival rate was lowest in 2014 at 60 percent and peaked in 2016 with 77 percent and 75 percent, respectively, in 2018. Analysing patterns of the Western Mediterranean route, the high proportion of deaths and missings in 2016 is striking. This year, only 27 percent survived an incident. Thereafter, however, the survival rate rises again and reaches 68 percent in 2018. The low percentage of survivors in 2016 might be due to the increase in migrants using the route in 2016 because of the emerging conflict in Morocco. Hence, migrants have not yet had helpful information to rely on for their journey from Morocco to Spain and have had to search for safe option themselves. Moreover, rescue operations were probably not yet ready to intervene in this region. To conclude, although according to the literature the total rate of deaths and missings is increasing, the proportion of deaths and missings within incidents is decreasing. Regarding the SDGs the results show that the probability of migrants surviving a hazardous event like a shipwreck increased over time. A finding that indicates a step forward in achieving the goal of ensuring safe migration. This result, combined with the above-mentioned finding that the average number of deaths of migrants per incident has decreased, suggests better and more effective rescue operations. 
 
-```{r by_month, message=FALSE, warning=FALSE}
+```{r by_month, message=FALSE, warning=FALSE, fig.cap="Number of incidents by month"}
 monthly <- missing_medsea %>%
   group_by(year, month) %>%
   dplyr::summarise(sum(total_dead_missing), sum(num_surv))
@@ -404,30 +372,51 @@ by_month
 # for animated output
 # ggplotly(by_month)
 ```
+
 Another hypothesis of earlier reports as to why the rate of deaths and missings has increased was that embarking is no longer restricted to good weather and sea conditions. To answer this question, the number of incidents per months can serve as an indicator, assuming that conditions are better in the summer months from May to September are better than in the winter months from October to April (see figure 4). A descriptive analysis shows that each year, most incidents happen from May to September. To analyse this question more detailed, a One-way Anova test was performed. Whereas the null hypothesis assumes no difference between means, the alternative hypthesis states that a difference between means exist. The following results were obtained
 
-![Anova test results] (images/ANOVA_Test_results.png) 
+```{r, fig.cap="OLS Output"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/ANOVA_Test_results.png')
+```
 
-![Anova overall results] (images/Anova_Overall.png) 
+```{r, fig.cap="Overall ANOVA Result"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Anova_Overall.png')
+```
 
 For significance value 0.05, overall the model is significant, F= 2.115, p = 0.0171. The p-value is less than the significance level, so the null hypothesis is rejected and it can be concluded that not all of population means are equal. Hence, there is a significant difference in the number of fatalities across months. The Tukey post-hoc test reveals exactly where those differences lie, by comparing all possible pairs of means. It controls for type I error and maintains the familywise error rate at 0.05 (FWER= 0.05 top of the table). 
 
-![Tukey test results] (images/Post-AD-HOC-testing1.png) ![Tukey test results] (images/Post-AD-HOC-testing2.png) 
+```{r, fig.cap="Tuckey test results I"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Post-AD-HOC-testing1.png')
+```
+
+```{r, fig.cap="Tuckey test results I"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/Post-AD-HOC-testing2.png')
+```
 
 The group1 and group2 columns are the groups being compared, the meandiff column is the difference in means of the two groups being calculated as group2 – group1, and the reject column states whether or not the null hypothesis should be rejected. In this case, even if the ANOVA is siginificant, a comparison of each month doesn't represent significant differences. However, to answer the question if there is a significant difference in the number of people deaths and missing between the seasons, months were grouped into Summer (May-September) and Winter (October-April). To test this a two sample t-test was conducted. The hypothesis being tested is:
 
 Null hypothesis: u1 = u2, which translates to the mean of summer months is equal to the mean of winter months
 Alternative hypothesis: u1 ? u2, which translates to the mean of summer months is not equal to the mean of winter months
 
-![t-test descriptive] (images/t-test_descriptive.png) 
+```{r, fig.cap="T-Test descriptive"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/t-test_descriptive.png')
+```
 
-![t-test results] (images/T-test_table.png) 
+```{r, fig.cap="T-Test results"}
+# This result was created in the accompanying python jupyter notebook
+knitr::include_graphics('images/T-test_table.png')
+```
 
 Summer season average deaths and missing (M= 24.465, SD= 59.91) is larger and has slightly larger variation than Winter season (M= 12.995, SD= 34.206). There is a statistically significant difference between the Total deaths and missings in Summer and Winter season (t(996)= 9.3.846, p= 0.0001, r= 0.1210). Hence, the hypothesis that the proportion of deaths and missings has increased because embarking is no longer restricted to good weahter conditions cannot be confirmed by the data used in this report. 
 
 To sum up the results, this report can confirm, that most of the deadly incidents occur in the Mediterranean area. A trend, which is consistent over time. Moreover, the data underline the different patterns of each route reported in former articles (figure 5). 
 
-```{r map_static, cache=TRUE, message=FALSE, warning=FALSE}
+```{r map_static, cache=TRUE, message=FALSE, warning=FALSE, fig.cap="Incident and route map"}
 # intiatlize a simple map
 worldMap <- fortify(map_data("world"), region = "mediterranean")
 
@@ -494,6 +483,7 @@ mapanimated <-
 #anim_save("mapanimated.gif", animation = last_animation())
 
 ```
+
 The results mirror the consequences of the EU-Turkey agreement. After the implementation, the number of deaths and missings increased on the Central Mediterranean route and declined on the Eastern Mediterranean route. The incidents on the Western Mediterranean route are also on the increase over time. Although the literature claims that the proportion of deaths is increasing, the report reveals that the proportion of survivors within an incident is increasing rather than decreasing. A finding, which is partly due to a smaller number migrants involved per incidents and possibly also to better rescue techniques. This has important implications for the UN’s Sustainability Agenda 2030. According to the results, the likelihood of dying in case of an event decreases. This indicates that migration is becoming safer. A step towards achieving SDG goal 10.7, which aims at orderly and safe migration. However, it should be noted that due to difficulties in obtaining data on deaths and missing migrants, the results can only be seen as an approximation.
 
 ## Discussion 
@@ -503,5 +493,3 @@ The results mirror the consequences of the EU-Turkey agreement. After the implem
  As AIS data example, combining missing migrants project data with other external big data is expected to broaden the migration research’s possibilities. In this regard, this report suggests combining the weather data with the missing migrants project’s data firstly, to improve the systematic analysis of fatality in migration journey and secondly, build safety guidelines for the migrants.
  To begin with, even though the causes of deaths and missings are specified in the data, precise factors lead to the dangerousness is not described in the data and only months are presumed to affect the safety of journey. Since the deaths and missings mainly take place during the journey through the ocean, which is heavily affected by the ocean currents and weather, weather data might provide further explanation for the factors lead to a dangerous journey. Also, this report has revealed that summer months has significantly different results. On top of that, if the weather is found to be the main determinant of successful arrival, safety guideline for migrants and the administrations could be built by exploring the weather and the location. To be specific, it could inform migrants who intend to take a specific migration route at specific weather, specific season and location the dangerousness level of the journey based on previous data. Also, based on the weather and the routes, the administrations could reinforce its rescue-ship infrastructure.  However, due to a budget issue, this report couldn’t implement weather data into the analysis. Future improvement by researchers is expected. 
 
-
-# References
